@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: Inside
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Yuliana Boyaca
+Implementation-Vendor-Id: com.inside
+Build-Jdk: 1.8.0_144
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/aplication
+Created-By: Maven Integration for Eclipse
+
