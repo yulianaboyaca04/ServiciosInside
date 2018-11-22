@@ -48,6 +48,7 @@ public class UsersController {
 		try {
 			UsersManager usmn = UsersManager.getInstance();
 			us = usmn.createUser(idUser, nameUser, lastName, birthDate, email, password, nickname);
+			UsersManager.getInstance().addUser(us);
 			System.out.println(us.toString());
 			return us.toString();
 		} catch (UserAlreadyExists e) {
