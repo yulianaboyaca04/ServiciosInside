@@ -13,5 +13,6 @@ public class EventInside {
 	private String descriptionEvent;
 	private Gallery gallery;
 	private ArrayList<Interest> eventInterests;
+	private ArrayList<Regulation> regulations;
 	
 }
