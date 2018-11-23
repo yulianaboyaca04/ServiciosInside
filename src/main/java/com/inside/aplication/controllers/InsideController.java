@@ -26,7 +26,7 @@ public class InsideController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/createUsera", method = RequestMethod.POST)
 	public String createUser() {
 		return "//TODO";
 	}
@@ -62,7 +62,7 @@ public class InsideController {
 
 	// ---------------------------------event-------------------------
 
-	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
+	@RequestMapping(value = "/createEventa", method = RequestMethod.POST)
 	public String createEvent() {
 		return "//TODO";
 	}
