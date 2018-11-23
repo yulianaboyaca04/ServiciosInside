@@ -1,8 +1,10 @@
 package com.inside.models.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.EventInside;
+import com.inside.models.entities.Interest;
 import com.inside.models.entities.Suscription;
 import com.inside.models.entities.UserInside;
 import com.inside.models.entities.ViewsHistory;
@@ -14,7 +16,32 @@ public class InsideManager {
 	private ArrayList<Suscription> suscriptions;
 	private ArrayList<AttendanceHistory> attendanceHistory;
 	private ArrayList<ViewsHistory> viewsHistory;
+	private ArrayList<Interest> interests;
 
+	//---------------------------------------------------------------------------------------
+	/**
+	* Uso del patron singleton para obtener instancias de esta clase de ser necesario
+	*/
+	private static InsideManager insideManger;
+	public static InsideManager getInstance() {
+		if (insideManger == null) {
+			insideManger = new InsideManager();
+		}
+		return insideManger;
+	}
+	//----------------------------------------------------------------------------------------
+
+	private InsideManager () {
+		events = new ArrayList<>();
+		users = new ArrayList<>();
+		suscriptions = new ArrayList<>();
+		attendanceHistory = new ArrayList<>();
+		viewsHistory = new ArrayList<>();
+		interests = new ArrayList<>();
+		
+		addInterest(new Interest("17", "los mujeres"));
+	}
+	
 	// user-----------------------------------------------------------
 	public void registerUser() {
 		// TODO
@@ -73,8 +100,18 @@ public class InsideManager {
 	public void registerViewToEvent(UserInside user, EventInside event) {
 
 	}
-
-
+	
+	//----------------------------------------------------------------------------------
+	
+	public void addInterest(Interest interest) {
+		this.interests.add(interest);
+		try {
+			interest.insertIntoDataBase();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//----------------------------------getters&setters---------------------------------
 	public ArrayList<EventInside> getEvents() {
 		return events;
