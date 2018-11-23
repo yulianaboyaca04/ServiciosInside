@@ -39,7 +39,7 @@ public class InsideManager {
 		viewsHistory = new ArrayList<>();
 		interests = new ArrayList<>();
 		
-		addInterest(new Interest("17", "los mujeres"));
+		addInterest(new Interest("18", "los changuitos"));
 	}
 	
 	// user-----------------------------------------------------------
