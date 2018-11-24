@@ -1,6 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.inside.persistence.DataBaseAcces;
 
 public class EventInside {
 
@@ -18,7 +22,7 @@ public class EventInside {
 	public EventInside() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public EventInside(String idEvent, UserInside userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
 			String nameEvent, String descriptionEvent, Gallery gallery, ArrayList<Interest> eventInterests,
 			ArrayList<Regulation> regulations) {
@@ -34,8 +38,6 @@ public class EventInside {
 		this.eventInterests = eventInterests;
 		this.regulations = regulations;
 	}
-
-
 
 	public String getIdEvent() {
 		return idEvent;
@@ -123,5 +125,19 @@ public class EventInside {
 				+ ", address=" + address + ", eventDate=" + eventDate + ", nameEvent=" + nameEvent
 				+ ", descriptionEvent=" + descriptionEvent + ", gallery=" + gallery + ", eventInterests="
 				+ eventInterests + ", regulations=" + regulations + "]";
+	}
+
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO EVENTS VALUES((?, ?, ?, ?, ?, ?, ?)");
+		preparedStatement.setString(1, this.idEvent);
+		preparedStatement.setString(2, this.userCreator.getIdUser());
+		preparedStatement.setString(3, this.howToBuy.getIdHowToBuy());
+		preparedStatement.setString(4, this.address.getIdAddress());
+		preparedStatement.setString(5, this.eventDate.getIdDate());
+		preparedStatement.setString(6, this.nameEvent);
+		preparedStatement.setString(7, this.descriptionEvent);
+		preparedStatement.setString(7, this.gallery.getIdGallery());
+		preparedStatement.execute();
 	}
 }
