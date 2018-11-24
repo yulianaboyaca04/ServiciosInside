@@ -1,10 +1,15 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.inside.persistence.DataBaseAcces;
+
 public class Credentials {
 
 	private String idCredential;
 	private CredentialsType credentialsType;
-	private String user;
+	private String userName;
 	private String passwordOrToken;
 
 	public Credentials() {
@@ -14,7 +19,7 @@ public class Credentials {
 	public Credentials(String idCredential, CredentialsType credentialsType, String user, String passwordOrToken) {
 		this.idCredential = idCredential;
 		this.credentialsType = credentialsType;
-		this.user = user;
+		this.userName = user;
 		this.passwordOrToken = passwordOrToken;
 	}
 
@@ -34,12 +39,12 @@ public class Credentials {
 		this.credentialsType = credentialsType;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setUserName(String user) {
+		this.userName = user;
 	}
 
 	public String getPasswordOrToken() {
@@ -52,8 +57,16 @@ public class Credentials {
 
 	@Override
 	public String toString() {
-		return "Credentials [idCredential=" + idCredential + ", credentialsType=" + credentialsType + ", user=" + user
+		return "Credentials [idCredential=" + idCredential + ", credentialsType=" + credentialsType + ", user=" + userName
 				+ ", passwordOrToken=" + passwordOrToken + "]";
 	}
 
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO CREDENTIALS VALUES(?,?,?,?)");
+		preparedStatement.setString(1, this.idCredential);
+		preparedStatement.setString(2, this.credentialsType.getIdCredentials());
+		preparedStatement.setString(3, this.userName);
+		preparedStatement.setString(4, this.passwordOrToken);
+		preparedStatement.execute();
+	}
 }

@@ -1,6 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
+
+import com.inside.persistence.DataBaseAcces;
 
 public class EventDate {
 
@@ -47,4 +51,11 @@ public class EventDate {
 		return "EventDate [idDate=" + idDate + ", dateStart=" + dateStart + ", dateFinish=" + dateFinish + "]";
 	}
 
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO DATES VALUES(?,?,?)");
+		preparedStatement.setString(1, this.idDate);
+		preparedStatement.setString(2, this.dateStart.toString());
+		preparedStatement.setString(3, this.dateFinish.toString());
+		preparedStatement.execute();
+	}
 }
