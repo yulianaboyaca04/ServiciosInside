@@ -105,10 +105,25 @@ public class UserInside {
 				+ ", userInteres=" + userInteres + "]";
 	}
 	
+//	public void insertIntoDataBase() throws SQLException {
+//		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO INTERESTS VALUES(?)");
+//		preparedStatement.setString(1, this.idUser);
+//	//	preparedStatement.setString(2, this.nameInterests);
+//		preparedStatement.execute();
+//	}
+	
+	
 	public void insertIntoDataBase() throws SQLException {
-		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO INTERESTS VALUES(?)");
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?,?)");
 		preparedStatement.setString(1, this.idUser);
-	//	preparedStatement.setString(2, this.nameInterests);
+		preparedStatement.setString(2, this.credential.getIdCredential());
+		preparedStatement.setString(3, this.image.getIdImage());
+		preparedStatement.setString(4, this.nameUser);
+		preparedStatement.setString(5, this.lastName);
+		preparedStatement.setDate(6, null);
+		preparedStatement.setString(7, this.nikename);
+		
 		preparedStatement.execute();
 	}
+	
 }

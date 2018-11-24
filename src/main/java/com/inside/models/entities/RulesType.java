@@ -1,5 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.inside.persistence.DataBaseAcces;
+
 public class RulesType {
 
 	private String idRulesType;
@@ -45,5 +50,19 @@ public class RulesType {
 		return "RulesType [idRulesType=" + idRulesType + ", nameRule=" + nameRule + ", descriptionRule="
 				+ descriptionRule + "]";
 	}
+	
+	
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO RULES_TYPE VALUES(?,?,?)");
+		preparedStatement.setString(1, this.idRulesType);
+		preparedStatement.setString(2, this.nameRule);
+		preparedStatement.setString(3, this.descriptionRule);
+		preparedStatement.execute();
+	}
+	
+	
+	
+	
+	
 	
 }

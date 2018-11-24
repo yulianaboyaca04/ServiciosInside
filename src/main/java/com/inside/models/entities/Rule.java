@@ -1,5 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.inside.persistence.DataBaseAcces;
+
 public class Rule {
 
 	private String idRule;
@@ -39,6 +44,14 @@ public class Rule {
 	@Override
 	public String toString() {
 		return "Rule [idRule=" + idRule + ", ruletype=" + ruletype + ", valueRule=" + valueRule + "]";
+	}
+	
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO RULES VALUES(?,?,?)");
+		preparedStatement.setString(1, this.idRule);
+		preparedStatement.setString(2, this.ruletype.getIdRulesType());
+		preparedStatement.setString(3, this.valueRule);
+		preparedStatement.execute();
 	}
 	
 }
