@@ -11,8 +11,7 @@ public class DataBaseAcces {
 	private static DataBaseAcces dataBaseAcces;
 	private DataBaseAcces() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("URL"+ ((char)61) +"%2Fsignin%2Fapex%2FCom");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager
 					.getConnection("jdbc:mysql://myinsidebd.cnluui5kegb8.us-east-1.rds.amazonaws.com/inside?" + "user=insideroot55&password=c96y99n94f97&serverTimezone=UTC");
 
