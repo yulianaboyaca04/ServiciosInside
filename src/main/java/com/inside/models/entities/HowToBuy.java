@@ -1,5 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.inside.persistence.DataBaseAcces;
+
 public class HowToBuy {
 
 	private String idHowToBuy;
@@ -12,7 +17,6 @@ public class HowToBuy {
 	}
 
 	public HowToBuy(String idHowToBuy, String descriptionHowToBuy, boolean inPresence, float price) {
-		super();
 		this.idHowToBuy = idHowToBuy;
 		this.descriptionHowToBuy = descriptionHowToBuy;
 		this.inPresence = inPresence;
@@ -55,5 +59,14 @@ public class HowToBuy {
 	public String toString() {
 		return "HowToBuy [idHowToBuy=" + idHowToBuy + ", descriptionHowToBuy=" + descriptionHowToBuy + ", inPresence="
 				+ inPresence + ", price=" + price + "]";
+	}
+	
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO HOW_TO_BUY VALUES(?,?,?,?)");
+		preparedStatement.setString(1, this.idHowToBuy);
+		preparedStatement.setString(2, this.descriptionHowToBuy);
+		preparedStatement.setBoolean(3, this.inPresence);
+		preparedStatement.setFloat(4, this.price);
+		preparedStatement.execute();
 	}
 }

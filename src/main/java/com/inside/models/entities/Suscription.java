@@ -1,5 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.inside.persistence.DataBaseAcces;
+
 public class Suscription {
 
 	private String idSusciption;
@@ -41,4 +46,11 @@ public class Suscription {
 		return "Suscription [idSusciption=" + idSusciption + ", user=" + user + ", event=" + event + "]";
 	}
 
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO SUSCRIPTION VALUES(?,?,?)");
+		preparedStatement.setString(1, this.idSusciption);
+		preparedStatement.setString(2, this.user.getIdUser());
+		preparedStatement.setString(3, this.event.getIdEvent());
+		preparedStatement.execute();
+	}
 }
