@@ -54,8 +54,8 @@ public class EventDate {
 	public void insertIntoDataBase() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO DATES VALUES(?,?,?)");
 		preparedStatement.setString(1, this.idDate);
-		preparedStatement.setString(2, this.dateStart.toString());
-		preparedStatement.setString(3, this.dateFinish.toString());
+		preparedStatement.setDate(2, null);
+		preparedStatement.setDate(3, null);
 		preparedStatement.execute();
 	}
 }
