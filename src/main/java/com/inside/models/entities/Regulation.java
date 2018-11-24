@@ -1,5 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import com.inside.persistence.DataBaseAcces;
+
 public class Regulation {
 
 	private String idRegulation;
@@ -35,4 +40,10 @@ public class Regulation {
 		return "Regulation [idRegulation=" + idRegulation + ", rule=" + rule + "]";
 	}
 	
+	public void insertIntoDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO REGULATIONS VALUES(?,?)");
+		preparedStatement.setString(1, this.idRegulation);
+		preparedStatement.setString(2, this.rule.getIdRule());
+		preparedStatement.execute();
+	}
 }
