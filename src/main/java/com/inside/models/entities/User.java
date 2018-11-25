@@ -1,6 +1,10 @@
 package com.inside.models.entities;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.inside.persistence.DataBaseAcces;
 
 /**
  * 

@@ -1,10 +1,12 @@
 package com.inside.persistence;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
+import com.inside.models.entities.CredentialsType;
 import com.inside.models.entities.Event;
 import com.inside.models.entities.EventDate;
 import com.inside.models.entities.EventInside;
@@ -27,6 +29,7 @@ public class PruebaPersistenciaYuli {
 	public Address adre;
 	public AttendanceHistory ah;
 	public Credentials cr;
+	public CredentialsType cT;
 	public EventInside ev;
 	public EventDate ed;
 	public Interest interest;
@@ -40,10 +43,126 @@ public class PruebaPersistenciaYuli {
 	
 	public static void main(String[] args) {
 		
+		PruebaPersistenciaYuli py =  new PruebaPersistenciaYuli();
+		py.generarRegistros();
 	}
 	
 	private void generarRegistros() {
-		img = new Image("2", "Image_url_2");
+		//img = new Image("3", "Image_url_2");
+		htb = new HowToBuy("20", "pago en efectivo", true, 1000);
+		adre = new Address("20", 247, 244, "Duitama", "B.solano");
 		
+		ed = new EventDate("30",null,null);
+		uI= new UserInside();
+		img =  new Image("30", "soy nico en un string");
+		
+		cT =  new CredentialsType("20", "facebook");
+		cr =  new Credentials("20", cT, "Nico", "Te pasas");
+		//--- array intereces----//
+		interest = new Interest("60","Dogs");
+		Interest interest1 = new Interest("1","Dogser");
+		Interest interest2 = new Interest("2","Dogsito");
+		ArrayList<Interest> arrayInteres  =  new ArrayList<>();
+		arrayInteres.add(interest);
+		arrayInteres.add(interest1);
+		arrayInteres.add(interest2);
+			//--- fin array intereces---//
+		//--- array rules ----//
+		rt =  new RulesType("30","Edad Minima","edad minima de las personas que pueden asistir al evento");
+		rule = new Rule("30",rt,"18");
+		Rule rule1 = new Rule("2", rt, "100");
+		
+		Rule rule2 = new Rule("29", rt, "15");
+		Rule rule3 = new Rule("3", rt, "80");
+		
+		ArrayList<Rule> arrayRules  =  new ArrayList<>();
+		
+		arrayRules.add(rule);
+		arrayRules.add(rule1);
+		arrayRules.add(rule2);
+		arrayRules.add(rule3);
+			//--- fin array rules---//
+		//--------user-------//
+		ArrayList<Image> gallery  =  new ArrayList<>();
+		gallery.add(img);
+		
+		uI =  new UserInside("16",cr,img,"Yuli","cardozo",null,"nico",arrayInteres);
+		//------ fin user----//
+		ev = new EventInside("12",uI,htb,adre,ed,"Aginaldo Samaquence","Esto se va descontrolar",gallery,arrayInteres,arrayRules);
+		System.out.println(ev.toString());
+	//	uI= new UserInside(idUser, credential, image, nameUser, lastName, birthDate, nikename, userInteres)
+		
+//			try {
+//				img.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				htb.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+		
+//			try {
+//				ed.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				cT.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				cr.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				interest.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				rt.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				rule3.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				uI.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			try {
+//				adre.insertIntoDataBase();
+//			} catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+//			
+			try {
+				ev.insertIntoDataBase();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		
+	
 	}
 }

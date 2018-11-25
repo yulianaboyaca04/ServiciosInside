@@ -15,18 +15,17 @@ public class EventInside {
 	private EventDate eventDate;
 	private String nameEvent;
 	private String descriptionEvent;
-	private Gallery gallery;
+	private ArrayList<Image> gallery;
 	private ArrayList<Interest> eventInterests;
-	private ArrayList<Regulation> regulations;
+	private ArrayList<Rule> regulations;
 
 	public EventInside() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public EventInside(String idEvent, UserInside userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
-			String nameEvent, String descriptionEvent, Gallery gallery, ArrayList<Interest> eventInterests,
-			ArrayList<Regulation> regulations) {
-		super();
+			String nameEvent, String descriptionEvent, ArrayList<Image> gallery, ArrayList<Interest> eventInterests,
+			ArrayList<Rule> regulations) {
 		this.idEvent = idEvent;
 		this.userCreator = userCreator;
 		this.howToBuy = howToBuy;
@@ -34,9 +33,18 @@ public class EventInside {
 		this.eventDate = eventDate;
 		this.nameEvent = nameEvent;
 		this.descriptionEvent = descriptionEvent;
-		this.gallery = gallery;
-		this.eventInterests = eventInterests;
-		this.regulations = regulations;
+		this.gallery = new ArrayList<Image>();
+		this.eventInterests = new ArrayList<Interest>();
+		this.regulations = new ArrayList<Rule>();
+		for (Image image : gallery) {
+			this.gallery.add(image);
+		}
+		for (Interest interest : eventInterests) {
+			this.eventInterests.add(interest);
+		}
+		for (Rule rule : regulations) {
+			this.regulations.add(rule);
+		}
 	}
 
 	public String getIdEvent() {
@@ -95,11 +103,11 @@ public class EventInside {
 		this.descriptionEvent = descriptionEvent;
 	}
 
-	public Gallery getGallery() {
+	public ArrayList<Image> getGallery() {
 		return gallery;
 	}
 
-	public void setGallery(Gallery gallery) {
+	public void setGallery(ArrayList<Image> gallery) {
 		this.gallery = gallery;
 	}
 
@@ -111,11 +119,11 @@ public class EventInside {
 		this.eventInterests = eventInterests;
 	}
 
-	public ArrayList<Regulation> getRegulations() {
+	public ArrayList<Rule> getRegulations() {
 		return regulations;
 	}
 
-	public void setRegulations(ArrayList<Regulation> regulations) {
+	public void setRegulations(ArrayList<Rule> regulations) {
 		this.regulations = regulations;
 	}
 
@@ -129,7 +137,7 @@ public class EventInside {
 
 	public void insertIntoDataBase() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
-				.prepareStatement("INSERT INTO EVENTS VALUES((?, ?, ?, ?, ?, ?, ?)");
+				.prepareStatement("INSERT INTO EVENTS VALUES(?, ?, ?, ?, ?, ?, ?)");
 		preparedStatement.setString(1, this.idEvent);
 		preparedStatement.setString(2, this.userCreator.getIdUser());
 		preparedStatement.setString(3, this.howToBuy.getIdHowToBuy());
@@ -137,7 +145,38 @@ public class EventInside {
 		preparedStatement.setString(5, this.eventDate.getIdDate());
 		preparedStatement.setString(6, this.nameEvent);
 		preparedStatement.setString(7, this.descriptionEvent);
-		preparedStatement.setString(7, this.gallery.getIdGallery());
+		preparedStatement.execute();
+		for (int i = 0; i < gallery.size() ; i++) {
+			insertGalleryIntoDatabase(gallery.get(i));
+		}
+		for (int i = 0; i < regulations.size() ; i++) {
+			insertRegulationIntoDatabase(regulations.get(i));
+		}
+		for (int i = 0; i < eventInterests.size() ; i++) {
+			insertEventInterestsIntoDatabase(eventInterests.get(i));
+		}
+	}
+	
+	public void insertRegulationIntoDatabase(Rule rule) throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO REGULATIONS VALUES(?,?)");
+		preparedStatement.setString(1, rule.getIdRule());
+		preparedStatement.setString(2, this.idEvent);
+		preparedStatement.execute();
+	}
+	public void insertGalleryIntoDatabase(Image image) throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO GALLERY VALUES(?,?)");
+		preparedStatement.setString(1, this.idEvent);
+		preparedStatement.setString(2, image.getIdImage());
+		preparedStatement.execute();
+	}
+	
+	public void insertEventInterestsIntoDatabase(Interest interest) throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO EVENT_INTERESTES VALUES(?,?)");
+		preparedStatement.setString(1,this.idEvent);
+		preparedStatement.setString(2, interest.getIdInterest());
 		preparedStatement.execute();
 	}
 }

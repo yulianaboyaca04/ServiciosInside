@@ -15,19 +15,22 @@ public class UserInside {
 	private String nameUser;
 	private String lastName;
 	private Date birthDate;
-	private String nikename;
+	private String nickename;
 	private ArrayList<Interest> userInteres;
+	
 	public UserInside(String idUser, Credentials credential, Image image, String nameUser, String lastName,
-			Date birthDate, String nikename, ArrayList<Interest> userInteres) {
-		super();
+			Date birthDate, String nickename, ArrayList<Interest> userInteres) {
 		this.idUser = idUser;
 		this.credential = credential;
 		this.image = image;
 		this.nameUser = nameUser;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
-		this.nikename = nikename;
-		this.userInteres = userInteres;
+		this.nickename = nickename;
+		this.userInteres = new ArrayList<Interest>();
+		for (Interest interest : userInteres) {
+			this.userInteres.add(interest);
+		}
 	}
 	
 	public UserInside() {
@@ -83,11 +86,11 @@ public class UserInside {
 	}
 
 	public String getNikename() {
-		return nikename;
+		return nickename;
 	}
 
 	public void setNikename(String nikename) {
-		this.nikename = nikename;
+		this.nickename = nikename;
 	}
 
 	public ArrayList<Interest> getUserInteres() {
@@ -101,28 +104,30 @@ public class UserInside {
 	@Override
 	public String toString() {
 		return "UserInside [idUser=" + idUser + ", credential=" + credential + ", image=" + image + ", nameUser="
-				+ nameUser + ", lastName=" + lastName + ", birthDate=" + birthDate + ", nikename=" + nikename
+				+ nameUser + ", lastName=" + lastName + ", birthDate=" + birthDate + ", nikename=" + nickename
 				+ ", userInteres=" + userInteres + "]";
 	}
 	
-//	public void insertIntoDataBase() throws SQLException {
-//		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO INTERESTS VALUES(?)");
-//		preparedStatement.setString(1, this.idUser);
-//	//	preparedStatement.setString(2, this.nameInterests);
-//		preparedStatement.execute();
-//	}
-	
-	
 	public void insertIntoDataBase() throws SQLException {
-		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?,?)");
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?)");
 		preparedStatement.setString(1, this.idUser);
 		preparedStatement.setString(2, this.credential.getIdCredential());
 		preparedStatement.setString(3, this.image.getIdImage());
 		preparedStatement.setString(4, this.nameUser);
 		preparedStatement.setString(5, this.lastName);
 		preparedStatement.setDate(6, null);
-		preparedStatement.setString(7, this.nikename);
-		
+		preparedStatement.setString(7, this.nickename);
+		preparedStatement.execute();
+		for (int i = 0; i < this.userInteres.size(); i++) {
+			insertUserInterestsIntoDatabase(this.userInteres.get(i));
+		}
+	}
+	
+	public void insertUserInterestsIntoDatabase(Interest interest) throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO USER_INTERESTS VALUES(?,?)");
+		preparedStatement.setString(1, this.idUser);
+		preparedStatement.setString(2, interest.getIdInterest());
 		preparedStatement.execute();
 	}
 	
