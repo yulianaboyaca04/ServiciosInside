@@ -2,12 +2,24 @@ package com.inside.models.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+
+import org.hibernate.validator.internal.util.privilegedactions.NewInstance;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
+import com.inside.models.entities.Credentials;
+import com.inside.models.entities.EventDate;
 import com.inside.models.entities.EventInside;
+import com.inside.models.entities.HowToBuy;
+import com.inside.models.entities.Image;
 import com.inside.models.entities.Interest;
+import com.inside.models.entities.Rule;
 import com.inside.models.entities.Suscription;
 import com.inside.models.entities.UserInside;
 import com.inside.models.entities.ViewsHistory;
+
 
 public class InsideManager {
 
@@ -38,18 +50,38 @@ public class InsideManager {
 		attendanceHistory = new ArrayList<>();
 		viewsHistory = new ArrayList<>();
 		interests = new ArrayList<>();
-		
-		addInterest(new Interest("999", "me gustan los jar"));
 	}
 	
 	// user-----------------------------------------------------------
-	public void registerUser() {
-		// TODO
+	/**
+	 * registra el usuario en la base de datos
+	 * @param userInside
+	 */
+	public void registerUser(UserInside userInside) {
+		try {
+			userInside.insertIntoDataBase();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public UserInside createUser() {
-		// TODO
-		return null;
+	/**
+	 * Crea un nuevo usuario
+	 * @param idUser
+	 * @param credential
+	 * @param image
+	 * @param nameUser
+	 * @param lastName
+	 * @param birthDate
+	 * @param nickename
+	 * @param userInteres
+	 * @return
+	 */
+	public UserInside createUser(String idUser, Credentials credential, Image image, String nameUser, String lastName,
+			Date birthDate, String nickename, ArrayList<Interest> userInteres) {
+		UserInside userInside =  new UserInside(idUser, credential, image, nameUser, lastName, birthDate, nickename, userInteres);
+		return userInside;
 	}
 
 	public void editUser() {
@@ -69,10 +101,38 @@ public class InsideManager {
 	}
 
 	// ---------------------------------event-------------------------
-
-	public EventInside createEvent() {
-		// TODO
-		return null;
+	/**
+	 * Crea un evento
+	 * @param idEvent
+	 * @param userCreator
+	 * @param howToBuy
+	 * @param address
+	 * @param eventDate
+	 * @param nameEvent
+	 * @param descriptionEvent
+	 * @param gallery
+	 * @param eventInterests
+	 * @param regulations
+	 * @return
+	 */
+	public EventInside createEvent(String idEvent, UserInside userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
+			String nameEvent, String descriptionEvent, ArrayList<Image> gallery, ArrayList<Interest> eventInterests,
+			ArrayList<Rule> regulations) {
+		EventInside eventInside = new EventInside(idEvent, userCreator, howToBuy, address, eventDate, nameEvent, descriptionEvent, gallery, eventInterests, regulations);
+		return eventInside;
+	}
+	
+	/**
+	 * Registra el evento en la base de datos
+	 * @param eventInside
+	 */
+	public void registerEvent(EventInside eventInside) {
+		try {
+			eventInside.insertIntoDataBase();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void editEvent() {

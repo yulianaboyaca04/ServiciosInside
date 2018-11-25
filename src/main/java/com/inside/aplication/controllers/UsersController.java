@@ -35,7 +35,6 @@ public class UsersController {
 	 * @return mensaje tipo log de lo sucedido
 	 */
 	//http://localhost:8092/createUser?idUser=1&nameUser=Yuliana&lastName=Boyaca&birhtDate=04,16,1999&email=Yuli@gmail.com&password=cuchurrumino&nickname=yuli
-	@RequestMapping("/createUser")
 	public String createUser(
 			@RequestParam(value = "idUser", defaultValue = "") String idUser, 
 			@RequestParam(value = "nameUser", defaultValue = "") String nameUser,
