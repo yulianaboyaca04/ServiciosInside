@@ -1,13 +1,14 @@
 package com.inside.persistence;
 
-import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.sql.Date;
 
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
 import com.inside.models.entities.CredentialsType;
-import com.inside.models.entities.Event;
 import com.inside.models.entities.EventDate;
 import com.inside.models.entities.EventInside;
 import com.inside.models.entities.Gallery;
@@ -52,7 +53,7 @@ public class PruebaPersistenciaYuli {
 		htb = new HowToBuy("20", "pago en efectivo", true, 1000);
 		adre = new Address("20", 247, 244, "Duitama", "B.solano");
 		
-		ed = new EventDate("30",null,null);
+		ed = new EventDate("39", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()+10000));
 		uI= new UserInside();
 		img =  new Image("30", "soy nico en un string");
 		
@@ -86,10 +87,11 @@ public class PruebaPersistenciaYuli {
 		ArrayList<Image> gallery  =  new ArrayList<>();
 		gallery.add(img);
 		
-		uI =  new UserInside("16",cr,img,"Yuli","cardozo",null,"nico",arrayInteres);
+		GregorianCalendar d = new GregorianCalendar(1996, GregorianCalendar.DECEMBER, 9);
+		uI =  new UserInside("42",cr,img,"Yuli","cardozo", new Date(d.getTimeInMillis()),"nico",arrayInteres);
 		//------ fin user----//
 		ev = new EventInside("12",uI,htb,adre,ed,"Aginaldo Samaquence","Esto se va descontrolar",gallery,arrayInteres,arrayRules);
-		System.out.println(ev.toString());
+//		System.out.println(ev.toString());
 	//	uI= new UserInside(idUser, credential, image, nameUser, lastName, birthDate, nikename, userInteres)
 		
 //			try {
@@ -154,13 +156,13 @@ public class PruebaPersistenciaYuli {
 //				e1.printStackTrace();
 //			}
 //			
-			try {
-				ev.insertIntoDataBase();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+//			try {
+//				ev.insertIntoDataBase();
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			
 			
 		
 	

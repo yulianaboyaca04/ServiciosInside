@@ -2,21 +2,21 @@ package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Date;
+import java.sql.Timestamp;
 
 import com.inside.persistence.DataBaseAcces;
 
 public class EventDate {
 
 	private String idDate;
-	private Date dateStart;
-	private Date dateFinish;
+	private Timestamp dateStart;
+	private Timestamp dateFinish;
 
 	public EventDate() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public EventDate(String idDate, Date dateStart, Date dateFinish) {
+	public EventDate(String idDate, Timestamp dateStart, Timestamp dateFinish) {
 		this.idDate = idDate;
 		this.dateStart = dateStart;
 		this.dateFinish = dateFinish;
@@ -30,19 +30,19 @@ public class EventDate {
 		this.idDate = idDate;
 	}
 
-	public Date getDateStart() {
+	public Timestamp getDateStart() {
 		return dateStart;
 	}
 
-	public void setDateStart(Date dateStart) {
+	public void setDateStart(Timestamp dateStart) {
 		this.dateStart = dateStart;
 	}
 
-	public Date getDateFinish() {
+	public Timestamp getDateFinish() {
 		return dateFinish;
 	}
 
-	public void setDateFinish(Date dateFinish) {
+	public void setDateFinish(Timestamp dateFinish) {
 		this.dateFinish = dateFinish;
 	}
 
@@ -54,8 +54,8 @@ public class EventDate {
 	public void insertIntoDataBase() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO DATES VALUES(?,?,?)");
 		preparedStatement.setString(1, this.idDate);
-		preparedStatement.setDate(2, null);
-		preparedStatement.setDate(3, null);
+		preparedStatement.setTimestamp(2, this.dateStart);
+		preparedStatement.setTimestamp(3, this.dateFinish);
 		preparedStatement.execute();
 	}
 }

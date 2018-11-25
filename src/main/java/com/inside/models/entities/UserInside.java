@@ -3,7 +3,7 @@ package com.inside.models.entities;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 import com.inside.persistence.DataBaseAcces;
 
@@ -115,7 +115,7 @@ public class UserInside {
 		preparedStatement.setString(3, this.image.getIdImage());
 		preparedStatement.setString(4, this.nameUser);
 		preparedStatement.setString(5, this.lastName);
-		preparedStatement.setDate(6, null);
+		preparedStatement.setDate(6, birthDate);
 		preparedStatement.setString(7, this.nickename);
 		preparedStatement.execute();
 		for (int i = 0; i < this.userInteres.size(); i++) {
