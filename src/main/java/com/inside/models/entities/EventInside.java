@@ -200,7 +200,7 @@ public class EventInside {
 			event.address = Address.searchAddressIntoDatabase(idAdrress, resultSet);
 			event.eventDate = EventDate.searchEventDateIntoDatabase(idEventDate, resultSet);
 			
-		
+			event.gallery = searchGalleryIntoDatabase(event.idEvent);
 			
 			
 			break;
@@ -214,10 +214,8 @@ public class EventInside {
 				.executeQuery("SELECT * FROM GALLERY WHERE id_event='" + idEvent + "'");
 		ArrayList<Image> gallery = new ArrayList<>();
 		while (resultSet.next()) {
-			Image img = new Image();
-			img.setIdImage(resultSet.getString(2));
-//			gallery.add(new Image())
-			
+			Image img = Image.searchUserIntoDatabase(resultSet.getString(2), resultSet);
+			gallery.add(img);
 			break;
 		}
 		return gallery;
