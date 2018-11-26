@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.inside.persistence.DataBaseAcces;
@@ -45,5 +46,17 @@ public class CredentialsType {
 		preparedStatement.setString(1, this.idCredentials);
 		preparedStatement.setString(2, this.name);
 		preparedStatement.execute();
+	}
+	
+	public static CredentialsType searchCredentialsTypeIntoDatabase(String codigo) throws SQLException {
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM CREDENTIALS_TYPE WHERE ID_CREDENTIAL='" + codigo + "'");
+		CredentialsType credentialsType = new CredentialsType();
+		while (resultSet.next()) {
+			credentialsType.idCredentials = resultSet.getString(1);
+			credentialsType.name = resultSet.getString(2);
+			break;
+		}
+		return credentialsType;
 	}
 }

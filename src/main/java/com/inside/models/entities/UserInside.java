@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
@@ -129,6 +130,28 @@ public class UserInside {
 		preparedStatement.setString(1, this.idUser);
 		preparedStatement.setString(2, interest.getIdInterest());
 		preparedStatement.execute();
+	}
+	
+	public static UserInside searchUserIntoDatabase(String codigo) throws SQLException {
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM USERS WHERE ID_USER='" + codigo + "'");
+		UserInside userInside = new UserInside();
+		while (resultSet.next()) {
+			userInside.idUser = resultSet.getString(1);
+			
+			userInside.nameUser = resultSet.getString(4);
+			userInside.lastName = resultSet.getString(5);
+			userInside.birthDate = resultSet.getDate(6);
+			userInside.nickename = resultSet.getString(7);
+			String idCredential = resultSet.getString(2);
+			String idImage = resultSet.getString(3);
+			userInside.credential = Credentials.searchUserIntoDatabase(idCredential, resultSet);
+			userInside.image = Image.searchUserIntoDatabase(idImage, resultSet);
+			//userInside.userInteres = Interest.searchInterestsUserIntoDatabase(resultSet.getString(8));
+			break;
+		}
+
+		return userInside;
 	}
 	
 }

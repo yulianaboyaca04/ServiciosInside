@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.sql.Date;
+import java.sql.SQLException;
 
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
@@ -43,9 +44,18 @@ public class PruebaPersistenciaYuli {
 	
 	
 	public static void main(String[] args) {
-		
 		PruebaPersistenciaYuli py =  new PruebaPersistenciaYuli();
-		py.generarRegistros();
+		py.testSearchPersistence();
+	}
+	
+	private void testSearchPersistence() {
+		try {
+			UserInside userInside = UserInside.searchUserIntoDatabase("60");
+			System.out.println(userInside.toString());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void generarRegistros() {
@@ -164,7 +174,5 @@ public class PruebaPersistenciaYuli {
 //			}
 //			
 			
-		
-	
 	}
 }

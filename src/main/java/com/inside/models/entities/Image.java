@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.inside.persistence.DataBaseAcces;
@@ -43,4 +44,17 @@ public class Image {
 		preparedStatement.execute();
 	}
 	
+	public static Image searchUserIntoDatabase(String codigo, ResultSet resultSet2) throws SQLException {
+		resultSet2.close();
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM IMAGES WHERE ID_IMAGE='" + codigo + "'");
+		Image image = new Image();
+		while (resultSet.next()) {
+			image.idImage = resultSet.getString(1);
+			image.content = resultSet.getString(2);
+			break;
+		}
+
+		return image;
+	}
 }

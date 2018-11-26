@@ -1,7 +1,9 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.inside.persistence.DataBaseAcces;
 
@@ -46,5 +48,18 @@ public class Interest {
 		preparedStatement.setString(1, this.idInterest);
 		preparedStatement.setString(2, this.nameInterests);
 		preparedStatement.execute();
+	}
+	
+	public static ArrayList<Interest> searchInterestsUserIntoDatabase(String codigo) throws SQLException {
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM INTERESTS WHERE ID_INTEREST='" + codigo + "'");
+		ArrayList<Interest> interestUser = new ArrayList<>();
+		while (resultSet.next()) {
+			Interest interest =  new Interest();
+			interest.idInterest = resultSet.getString(1);
+			interest.nameInterests = resultSet.getString(2);
+			interestUser.add(interest);
+		}
+		return interestUser;
 	}
 }
