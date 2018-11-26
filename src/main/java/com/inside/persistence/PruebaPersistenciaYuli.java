@@ -46,8 +46,8 @@ public class PruebaPersistenciaYuli {
 	
 	private void testSearchPersistence() {
 		try {
-			UserInside userInside = UserInside.searchUserIntoDatabase("39");
-			System.out.println(userInside.toString());
+			UserInside userInside = UserInside.searchUserIntoDatabase("42");
+			System.out.println(JsonManager.printJson(userInside));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

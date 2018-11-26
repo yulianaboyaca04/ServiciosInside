@@ -138,16 +138,14 @@ public class UserInside {
 		UserInside userInside = new UserInside();
 		while (resultSet.next()) {
 			userInside.idUser = resultSet.getString(1);
-			
 			userInside.nameUser = resultSet.getString(4);
 			userInside.lastName = resultSet.getString(5);
 			userInside.birthDate = resultSet.getDate(6);
 			userInside.nickename = resultSet.getString(7);
 			String idCredential = resultSet.getString(2);
 			String idImage = resultSet.getString(3);
-
 			userInside.credential = Credentials.searchUserIntoDatabase(idCredential, resultSet);
-			userInside.image = Image.searchUserIntoDatabase(idImage, resultSet);
+			userInside.image = Image.searchUserIntoDatabase(idImage);
 			userInside.userInteres = searchInterestsIntoDatabase(userInside.idUser);
 			break;
 		}
@@ -159,10 +157,13 @@ public class UserInside {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM USER_INTERESTS WHERE ID_USER='" + idUser + "'");
 		ArrayList<Interest> interests = new ArrayList<>();
+		ArrayList<String> idInterests = new ArrayList<>();
 		while (resultSet.next()) {
-			Interest interest = Interest.searchUserIntoDatabase(resultSet.getString(2), resultSet);
+			idInterests.add(resultSet.getString(2));
+		}
+		for (String string : idInterests) {
+			Interest interest = Interest.searchUserIntoDatabase(string, resultSet);
 			interests.add(interest);
-			break;
 		}
 		return interests;
 	}
