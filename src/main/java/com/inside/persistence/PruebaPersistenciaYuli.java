@@ -50,7 +50,7 @@ public class PruebaPersistenciaYuli {
 	
 	private void testSearchPersistence() {
 		try {
-			UserInside userInside = UserInside.searchUserIntoDatabase("60");
+			UserInside userInside = UserInside.searchUserIntoDatabase("39");
 			System.out.println(userInside.toString());
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
