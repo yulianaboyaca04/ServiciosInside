@@ -44,8 +44,7 @@ public class Image {
 		preparedStatement.execute();
 	}
 	
-	public static Image searchUserIntoDatabase(String codigo, ResultSet resultSet2) throws SQLException {
-		resultSet2.close();
+	public static Image searchUserIntoDatabase(String codigo) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM IMAGES WHERE ID_IMAGE='" + codigo + "'");
 		Image image = new Image();

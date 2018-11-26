@@ -212,10 +212,13 @@ public class EventInside {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM GALLERY WHERE id_event='" + idEvent + "'");
 		ArrayList<Image> gallery = new ArrayList<>();
+		ArrayList<String> idImages = new ArrayList<>();
 		while (resultSet.next()) {
-			Image img = Image.searchUserIntoDatabase(resultSet.getString(2), resultSet);
+			idImages.add(resultSet.getString(2));	
+		}
+		for (String image : idImages) {
+			Image img = Image.searchUserIntoDatabase(image);
 			gallery.add(img);
-			break;
 		}
 		return gallery;
 	}
