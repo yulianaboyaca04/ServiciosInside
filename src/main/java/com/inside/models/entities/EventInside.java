@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -20,7 +21,7 @@ public class EventInside {
 	private ArrayList<Rule> regulations;
 
 	public EventInside() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public EventInside(String idEvent, UserInside userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
@@ -146,17 +147,17 @@ public class EventInside {
 		preparedStatement.setString(6, this.nameEvent);
 		preparedStatement.setString(7, this.descriptionEvent);
 		preparedStatement.execute();
-		for (int i = 0; i < gallery.size() ; i++) {
+		for (int i = 0; i < gallery.size(); i++) {
 			insertGalleryIntoDatabase(gallery.get(i));
 		}
-		for (int i = 0; i < regulations.size() ; i++) {
+		for (int i = 0; i < regulations.size(); i++) {
 			insertRegulationIntoDatabase(regulations.get(i));
 		}
-		for (int i = 0; i < eventInterests.size() ; i++) {
+		for (int i = 0; i < eventInterests.size(); i++) {
 			insertEventInterestsIntoDatabase(eventInterests.get(i));
 		}
 	}
-	
+
 	public void insertRegulationIntoDatabase(Rule rule) throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
 				.prepareStatement("INSERT INTO REGULATIONS VALUES(?,?)");
@@ -164,6 +165,7 @@ public class EventInside {
 		preparedStatement.setString(2, this.idEvent);
 		preparedStatement.execute();
 	}
+
 	public void insertGalleryIntoDatabase(Image image) throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
 				.prepareStatement("INSERT INTO GALLERY VALUES(?,?)");
@@ -171,12 +173,25 @@ public class EventInside {
 		preparedStatement.setString(2, image.getIdImage());
 		preparedStatement.execute();
 	}
-	
+
 	public void insertEventInterestsIntoDatabase(Interest interest) throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
 				.prepareStatement("INSERT INTO EVENT_INTERESTES VALUES(?,?)");
-		preparedStatement.setString(1,this.idEvent);
+		preparedStatement.setString(1, this.idEvent);
 		preparedStatement.setString(2, interest.getIdInterest());
 		preparedStatement.execute();
+	}
+
+	public static EventInside searchEventIntoDatabase(String codigo) throws SQLException {
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM EVENTS WHERE id_event='" + codigo + "'");
+		EventInside event = new EventInside();
+		while (resultSet.next()) {
+			event.idEvent = resultSet.getString(1);
+			event.nameEvent = resultSet.getString(6); 
+			break;
+		}
+
+		return event;
 	}
 }

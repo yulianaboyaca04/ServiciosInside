@@ -140,8 +140,15 @@ public class InsideManager {
 
 	}
 
-	public void searchEvent() {
-
+	public EventInside searchEvent(String idEvent) {
+		EventInside event = null;
+		try {
+			event = EventInside.searchEventIntoDatabase(idEvent);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return event;
 	}
 
 	//------------------------------------------------------------------------------
