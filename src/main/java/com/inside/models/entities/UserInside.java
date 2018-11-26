@@ -105,7 +105,7 @@ public class UserInside {
 	@Override
 	public String toString() {
 		return "UserInside [idUser=" + idUser + ", credential=" + credential + ", image=" + image + ", nameUser="
-				+ nameUser + ", lastName=" + lastName + ", birthDate=" + birthDate + ", nikename=" + nickename
+				+ nameUser + ", lastName=" + lastName + ", birthDate=" + birthDate + ", nickename=" + nickename
 				+ ", userInteres=" + userInteres + "]";
 	}
 	
@@ -145,13 +145,25 @@ public class UserInside {
 			userInside.nickename = resultSet.getString(7);
 			String idCredential = resultSet.getString(2);
 			String idImage = resultSet.getString(3);
+
 			userInside.credential = Credentials.searchUserIntoDatabase(idCredential, resultSet);
 			userInside.image = Image.searchUserIntoDatabase(idImage, resultSet);
-			//userInside.userInteres = Interest.searchInterestsUserIntoDatabase(resultSet.getString(8));
+			userInside.userInteres = searchInterestsIntoDatabase(userInside.idUser);
 			break;
 		}
 
 		return userInside;
 	}
 	
+	public static ArrayList<Interest> searchInterestsIntoDatabase(String idUser) throws SQLException{
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM USER_INTERESTS WHERE ID_USER='" + idUser + "'");
+		ArrayList<Interest> interests = new ArrayList<>();
+		while (resultSet.next()) {
+			Interest interest = Interest.searchUserIntoDatabase(resultSet.getString(2), resultSet);
+			interests.add(interest);
+			break;
+		}
+		return interests;
+	}
 }

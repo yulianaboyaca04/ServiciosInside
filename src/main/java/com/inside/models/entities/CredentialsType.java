@@ -48,9 +48,10 @@ public class CredentialsType {
 		preparedStatement.execute();
 	}
 	
-	public static CredentialsType searchCredentialsTypeIntoDatabase(String codigo) throws SQLException {
+	public static CredentialsType searchCredentialsTypeIntoDatabase(String codigo, ResultSet resultSet2) throws SQLException {
+		resultSet2.close();
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
-				.executeQuery("SELECT * FROM CREDENTIALS_TYPE WHERE ID_CREDENTIAL='" + codigo + "'");
+				.executeQuery("SELECT * FROM CREDENTIALS_TYPE WHERE ID_CREDENTIALS_TYPE='" + codigo + "'");
 		CredentialsType credentialsType = new CredentialsType();
 		while (resultSet.next()) {
 			credentialsType.idCredentials = resultSet.getString(1);

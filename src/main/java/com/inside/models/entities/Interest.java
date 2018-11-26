@@ -49,16 +49,16 @@ public class Interest {
 		preparedStatement.setString(2, this.nameInterests);
 		preparedStatement.execute();
 	}
-	
-	public static ArrayList<Interest> searchInterestsUserIntoDatabase(String codigo) throws SQLException {
+
+	public static Interest searchUserIntoDatabase(String codigo, ResultSet resultSet2) throws SQLException {
+		resultSet2.close();
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM INTERESTS WHERE ID_INTEREST='" + codigo + "'");
-		ArrayList<Interest> interestUser = new ArrayList<>();
+		Interest interestUser = new Interest();
 		while (resultSet.next()) {
-			Interest interest =  new Interest();
-			interest.idInterest = resultSet.getString(1);
-			interest.nameInterests = resultSet.getString(2);
-			interestUser.add(interest);
+			interestUser.idInterest = resultSet.getString(1);
+			interestUser.nameInterests = resultSet.getString(2);
+			break;
 		}
 		return interestUser;
 	}

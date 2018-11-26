@@ -78,9 +78,10 @@ public class Credentials {
 		Credentials credentials = new Credentials();
 		while (resultSet.next()) {
 			credentials.idCredential = resultSet.getString(1);
-			credentials.credentialsType = CredentialsType.searchCredentialsTypeIntoDatabase(resultSet.getString(2));
+			String idCredentialType =resultSet.getString(2);
 			credentials.userName = resultSet.getString(3);
 			credentials.passwordOrToken = resultSet.getString(4);
+			credentials.credentialsType = CredentialsType.searchCredentialsTypeIntoDatabase(idCredentialType, resultSet);
 			break;
 		}
 
