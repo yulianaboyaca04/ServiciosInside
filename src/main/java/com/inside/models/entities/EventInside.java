@@ -193,7 +193,6 @@ public class EventInside {
 			String idHowToBuy = resultSet.getString(3);
 			String idAdrress =  resultSet.getString(4);
 			String idEventDate = resultSet.getString(5);
-			String idGallery = resultSet.getString(5);
 
 			//			event.userCreator = UserInside.searchUserIntoDatabase(resultSet.getString(2));
 			event.howToBuy = HowToBuy.searchHowToBuyIntoDatabase(idHowToBuy, resultSet);
@@ -201,8 +200,8 @@ public class EventInside {
 			event.eventDate = EventDate.searchEventDateIntoDatabase(idEventDate, resultSet);
 			
 			event.gallery = searchGalleryIntoDatabase(event.idEvent);
-			
-			
+			event.eventInterests = searchEventInterestsIntoDatabase(event.idEvent);
+			event.regulations = searchRegulationsIntoDatabase(event.idEvent);
 			break;
 		}
 
@@ -219,5 +218,29 @@ public class EventInside {
 			break;
 		}
 		return gallery;
+	}
+
+	public static ArrayList<Interest> searchEventInterestsIntoDatabase(String idEvent) throws SQLException{
+		ArrayList<Interest> eventInterest = new ArrayList<>();
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM EVENT_INTERESTES WHERE id_event='" + idEvent + "'");
+		while (resultSet.next()) {
+			Interest interest = null /* = Interest.searchUserIntoDatabase(resultSet.getString(2), resultSet)*/;
+			eventInterest.add(interest);
+			break;
+		}
+		return eventInterest;
+	}
+
+	public static ArrayList<Rule> searchRegulationsIntoDatabase(String idEvent) throws SQLException{
+		ArrayList<Rule> regulation = new ArrayList<>();
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM REGULATIONS WHERE id_event='" + idEvent + "'");
+		while (resultSet.next()) {
+			Rule rule = Rule.searchRuleIntoDatabase(resultSet.getString(1), resultSet);
+			regulation.add(rule);
+			break;
+		}
+		return regulation;
 	}
 }

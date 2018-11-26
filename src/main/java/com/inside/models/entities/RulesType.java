@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.inside.persistence.DataBaseAcces;
@@ -58,6 +59,20 @@ public class RulesType {
 		preparedStatement.setString(2, this.nameRule);
 		preparedStatement.setString(3, this.descriptionRule);
 		preparedStatement.execute();
+	}
+
+	public static RulesType searchRulesTypeIntoDatabase(String idRuleType, ResultSet resultSet) throws SQLException {
+		resultSet.close();
+		resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM RULES_TYPE WHERE id_rules_type='" + idRuleType + "'");
+		RulesType rulesType = new RulesType();
+		while (resultSet.next()) {
+			rulesType.idRulesType = resultSet.getString(1);
+			rulesType.nameRule = resultSet.getString(2);
+			rulesType.descriptionRule = resultSet.getString(3);
+			break;
+		}
+		return rulesType;
 	}
 	
 	
