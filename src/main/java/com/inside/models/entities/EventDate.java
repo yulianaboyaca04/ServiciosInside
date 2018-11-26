@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
@@ -58,4 +59,20 @@ public class EventDate {
 		preparedStatement.setTimestamp(3, this.dateFinish);
 		preparedStatement.execute();
 	}
+
+	public static EventDate searchEventDateIntoDatabase(String idEventDate, ResultSet resultSet) throws SQLException {
+		resultSet.close();
+		resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM DATES WHERE id_DATE='" + idEventDate + "'");
+		EventDate eventDate = new EventDate();
+		while (resultSet.next()) {
+			eventDate.idDate = resultSet.getString(1);
+			eventDate.dateStart = resultSet.getTimestamp(2);
+			eventDate.dateFinish = resultSet.getTimestamp(3);
+			break;
+		}
+		resultSet.close();
+		return eventDate;
+	}
+
 }

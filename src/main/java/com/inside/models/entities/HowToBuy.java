@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.inside.persistence.DataBaseAcces;
@@ -60,13 +61,29 @@ public class HowToBuy {
 		return "HowToBuy [idHowToBuy=" + idHowToBuy + ", descriptionHowToBuy=" + descriptionHowToBuy + ", inPresence="
 				+ inPresence + ", price=" + price + "]";
 	}
-	
+
 	public void insertIntoDataBase() throws SQLException {
-		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO HOW_TO_BUY VALUES(?,?,?,?)");
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO HOW_TO_BUY VALUES(?,?,?,?)");
 		preparedStatement.setString(1, this.idHowToBuy);
 		preparedStatement.setString(2, this.descriptionHowToBuy);
 		preparedStatement.setBoolean(3, this.inPresence);
 		preparedStatement.setFloat(4, this.price);
 		preparedStatement.execute();
+	}
+
+	public static HowToBuy searchHowToBuyIntoDatabase(String idHowToBuy, ResultSet resultSet) throws SQLException {
+		resultSet.close();
+		 resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM HOW_TO_BUY WHERE id_how_to_buy='" + idHowToBuy + "'");
+		HowToBuy howToBuy = new HowToBuy();
+		while (resultSet.next()) {
+			howToBuy.idHowToBuy = resultSet.getString(1);
+			howToBuy.descriptionHowToBuy = resultSet.getString(2);
+			howToBuy.inPresence = resultSet.getBoolean(3);
+			howToBuy.price = resultSet.getFloat(4);
+			break;
+		}
+		return howToBuy;
 	}
 }

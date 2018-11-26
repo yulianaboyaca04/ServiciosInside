@@ -188,10 +188,38 @@ public class EventInside {
 		EventInside event = new EventInside();
 		while (resultSet.next()) {
 			event.idEvent = resultSet.getString(1);
-			event.nameEvent = resultSet.getString(6); 
+			event.nameEvent = resultSet.getString(6);
+			event.descriptionEvent = resultSet.getString(7);
+			String idHowToBuy = resultSet.getString(3);
+			String idAdrress =  resultSet.getString(4);
+			String idEventDate = resultSet.getString(5);
+			String idGallery = resultSet.getString(5);
+
+			//			event.userCreator = UserInside.searchUserIntoDatabase(resultSet.getString(2));
+			event.howToBuy = HowToBuy.searchHowToBuyIntoDatabase(idHowToBuy, resultSet);
+			event.address = Address.searchAddressIntoDatabase(idAdrress, resultSet);
+			event.eventDate = EventDate.searchEventDateIntoDatabase(idEventDate, resultSet);
+			
+		
+			
+			
 			break;
 		}
 
 		return event;
+	}
+	
+	public static ArrayList<Image> searchGalleryIntoDatabase(String idEvent) throws SQLException{
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM GALLERY WHERE id_event='" + idEvent + "'");
+		ArrayList<Image> gallery = new ArrayList<>();
+		while (resultSet.next()) {
+			Image img = new Image();
+			img.setIdImage(resultSet.getString(2));
+//			gallery.add(new Image())
+			
+			break;
+		}
+		return gallery;
 	}
 }

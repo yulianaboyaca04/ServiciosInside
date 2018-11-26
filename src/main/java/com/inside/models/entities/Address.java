@@ -1,6 +1,7 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.inside.persistence.DataBaseAcces;
@@ -12,7 +13,7 @@ public class Address {
 	private float longitude;
 	private String nameCity;
 	private String namePlace;
-	
+
 	public Address() {
 		// TODO Auto-generated constructor stub
 	}
@@ -70,14 +71,31 @@ public class Address {
 		return "Address [idAddress=" + idAddress + ", latitude=" + latitude + ", longitude=" + longitude + ", nameCity="
 				+ nameCity + ", namePlace=" + namePlace + "]";
 	}
-	
+
 	public void insertIntoDataBase() throws SQLException {
-		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO ADDRESS VALUES(?,?,?,?,?)");
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO ADDRESS VALUES(?,?,?,?,?)");
 		preparedStatement.setString(1, this.idAddress);
 		preparedStatement.setFloat(2, this.latitude);
 		preparedStatement.setFloat(3, this.longitude);
 		preparedStatement.setString(4, this.nameCity);
 		preparedStatement.setString(5, this.namePlace);
 		preparedStatement.execute();
+	}
+
+	public static Address searchAddressIntoDatabase(String idAddress, ResultSet resultSet) throws SQLException {
+		resultSet.close();
+		resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM ADDRESS WHERE id_address='" + idAddress + "'");
+		Address address = new Address();
+		while (resultSet.next()) {
+			address.idAddress = resultSet.getString(1);
+			address.latitude = resultSet.getFloat(2);
+			address.longitude = resultSet.getFloat(3);
+			address.nameCity = resultSet.getString(4);
+			address.namePlace = resultSet.getString(5);
+			break;
+		}
+		return address;
 	}
 }
