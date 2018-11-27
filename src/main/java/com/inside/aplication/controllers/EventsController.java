@@ -52,9 +52,9 @@ public class EventsController {
 	}
 
 	@RequestMapping(value = "/searchEvent", method = RequestMethod.GET)
-	public String searchEvent() {
-		return "//TODO";
-
+	public String searchEvent(@RequestParam(value = "idEvent", defaultValue = "") String idEvent) {
+		EventInside ev = InsideManager.getInstance().searchEvent(idEvent);
+		return JsonManager.printJson(ev);
 	}
 	
 	
