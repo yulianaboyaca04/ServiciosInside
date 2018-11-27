@@ -1,5 +1,8 @@
 package com.inside.aplication.controllers;
 
+import java.sql.Date;
+import java.sql.SQLException;
+
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,8 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inside.exceptions.UserAlreadyExists;
+import com.inside.models.dao.InsideManager;
 import com.inside.models.dao.UsersManager;
+import com.inside.models.entities.Credentials;
+import com.inside.models.entities.Image;
 import com.inside.models.entities.User;
+import com.inside.models.entities.UserInside;
 import com.inside.persistence.JsonManager;
 /**
  * 
@@ -21,11 +28,26 @@ import com.inside.persistence.JsonManager;
 public class UsersController {
 
 	/**
-	 * 
+	 * String idUser, Credentials credential, Image image, String nameUser, String lastName,
+			Date birthDate, String nickename
 	 */
 	@RequestMapping(value = "/registerUser", method = RequestMethod.POST)
-	public String registerUser() {
-		return "//TODO";
+	public String registerUser(@RequestParam(value = "idUser", defaultValue = "") String idUser, 
+			@RequestParam(value = "credentials", defaultValue = "") Credentials credential,
+			@RequestParam(value = "image", defaultValue = "") Image image,
+			@RequestParam(value = "nameUser", defaultValue = "") String nameUser,
+			@RequestParam(value = "lastName", defaultValue = "") String lastName,
+			@RequestParam(value = "birthDate", defaultValue = "") Date birthDate,
+			@RequestParam(value = "nickname", defaultValue = "") String nickname) {
+		UserInside userInside;
+		try {
+			userInside = InsideManager.getInstance().createUser(idUser, credential, image, nameUser, lastName, birthDate, nickname, null);
+			System.out.println(userInside.toString());
+			userInside.insertIntoDataBase();
+			return userInside.toString();
+		} catch (UserAlreadyExists | SQLException e) {
+			return e.getMessage();
+		}
 	}
 
 	/**
@@ -106,7 +128,7 @@ public class UsersController {
 	
 	
 	/**
-	 * metodo que permite crear usuarios mediante el metodo post
+	 * metodo que permite crear usuarios mediante el metodo get
 	 * @param idUser
 	 * @param nameUser
 	 * @param lastName

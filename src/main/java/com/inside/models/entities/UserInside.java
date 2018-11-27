@@ -23,20 +23,20 @@ public class UserInside {
 	private String lastName;
 	@JsonProperty("birthDate")
 	private Date birthDate;
-	@JsonProperty("nickename")
-	private String nickename;
+	@JsonProperty("nickname")
+	private String nickname;
 	@JsonProperty("userInteres")
 	private ArrayList<Interest> userInteres;
 	
 	public UserInside(String idUser, Credentials credential, Image image, String nameUser, String lastName,
-			Date birthDate, String nickename, ArrayList<Interest> userInteres) {
+			Date birthDate, String nickname, ArrayList<Interest> userInteres) {
 		this.idUser = idUser;
 		this.credential = credential;
 		this.image = image;
 		this.nameUser = nameUser;
 		this.lastName = lastName;
 		this.birthDate = birthDate;
-		this.nickename = nickename;
+		this.nickname = nickname;
 		this.userInteres = new ArrayList<Interest>();
 		for (Interest interest : userInteres) {
 			this.userInteres.add(interest);
@@ -95,12 +95,12 @@ public class UserInside {
 		this.birthDate = birthDate;
 	}
 
-	public String getNikename() {
-		return nickename;
+	public String getNickname() {
+		return nickname;
 	}
 
-	public void setNikename(String nikename) {
-		this.nickename = nikename;
+	public void setNickname(String nikename) {
+		this.nickname = nikename;
 	}
 
 	public ArrayList<Interest> getUserInteres() {
@@ -114,7 +114,7 @@ public class UserInside {
 	@Override
 	public String toString() {
 		return "UserInside [idUser=" + idUser + ", credential=" + credential + ", image=" + image + ", nameUser="
-				+ nameUser + ", lastName=" + lastName + ", birthDate=" + birthDate + ", nickename=" + nickename
+				+ nameUser + ", lastName=" + lastName + ", birthDate=" + birthDate + ", nickname=" + nickname
 				+ ", userInteres=" + userInteres + "]";
 	}
 	
@@ -126,7 +126,7 @@ public class UserInside {
 		preparedStatement.setString(4, this.nameUser);
 		preparedStatement.setString(5, this.lastName);
 		preparedStatement.setDate(6, birthDate);
-		preparedStatement.setString(7, this.nickename);
+		preparedStatement.setString(7, this.nickname);
 		preparedStatement.execute();
 		for (int i = 0; i < this.userInteres.size(); i++) {
 			insertUserInterestsIntoDatabase(this.userInteres.get(i));
@@ -150,7 +150,7 @@ public class UserInside {
 			userInside.nameUser = resultSet.getString(4);
 			userInside.lastName = resultSet.getString(5);
 			userInside.birthDate = resultSet.getDate(6);
-			userInside.nickename = resultSet.getString(7);
+			userInside.nickname = resultSet.getString(7);
 			String idCredential = resultSet.getString(2);
 			String idImage = resultSet.getString(3);
 			userInside.credential = Credentials.searchUserIntoDatabase(idCredential, resultSet);
