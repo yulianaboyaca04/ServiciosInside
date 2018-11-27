@@ -90,7 +90,9 @@ public class Address {
 	}
 
 	public static Address searchAddressIntoDatabase(String idAddress, ResultSet resultSet) throws SQLException {
-		resultSet.close();
+		if (resultSet != null) {
+			resultSet.close();
+		}
 		resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM ADDRESS WHERE id_address='" + idAddress + "'");
 		Address address = new Address();

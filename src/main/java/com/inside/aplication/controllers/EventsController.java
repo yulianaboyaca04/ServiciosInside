@@ -26,7 +26,7 @@ import com.inside.persistence.JsonManager;
 @RestController
 public class EventsController {
 
-	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
+	@RequestMapping(value = "/createEventInside", method = RequestMethod.POST)
 	public String createEvent(@Valid @RequestBody EventDTO eventDTO) {
 		EventInside event = null;
 		try {

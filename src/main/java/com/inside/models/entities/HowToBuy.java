@@ -78,7 +78,9 @@ public class HowToBuy {
 	}
 
 	public static HowToBuy searchHowToBuyIntoDatabase(String idHowToBuy, ResultSet resultSet) throws SQLException {
-		resultSet.close();
+		if (resultSet != null) {
+			resultSet.close();
+		}
 		resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM HOW_TO_BUY WHERE id_how_to_buy='" + idHowToBuy + "'");
 		HowToBuy howToBuy = new HowToBuy();

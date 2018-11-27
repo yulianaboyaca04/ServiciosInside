@@ -66,7 +66,9 @@ public class EventDate {
 	}
 
 	public static EventDate searchEventDateIntoDatabase(String idEventDate, ResultSet resultSet) throws SQLException {
-		resultSet.close();
+		if (resultSet != null) {
+			resultSet.close();
+		}
 		resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM DATES WHERE id_DATE='" + idEventDate + "'");
 		EventDate eventDate = new EventDate();
