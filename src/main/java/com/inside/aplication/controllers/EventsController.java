@@ -1,5 +1,7 @@
 package com.inside.aplication.controllers;
 
+import java.sql.SQLException;
+
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inside.models.dao.EventsManager;
+import com.inside.models.dao.InsideManager;
+import com.inside.models.dto.EventDTO;
 import com.inside.models.entities.Event;
+import com.inside.models.entities.EventInside;
 import com.inside.persistence.JsonManager;
 
 /**
@@ -22,8 +27,17 @@ import com.inside.persistence.JsonManager;
 public class EventsController {
 
 	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
-	public String createEvent() {
-		return "//TODO";
+	public String createEvent(@Valid @RequestBody EventDTO eventDTO) {
+		EventInside event = null;
+		try {
+			event = eventDTO.generateEvent();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return JsonManager.printJson(event);
+//		
+//		InsideManager.getInstance().registerEvent(event);
+//		return JsonManager.printJson(event); // TODO cambiar por un log de la creacion
 	}
 
 	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)

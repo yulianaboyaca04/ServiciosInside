@@ -10,25 +10,15 @@ import com.inside.persistence.DataBaseAcces;
 
 public class EventInside {
 
-	@JsonProperty("idEvent")
 	private String idEvent;
-	@JsonProperty("userCreator")
 	private UserInside userCreator;
-	@JsonProperty("howToBuy")
 	private HowToBuy howToBuy;
-	@JsonProperty("address")
 	private Address address;
-	@JsonProperty("eventDate")
 	private EventDate eventDate;
-	@JsonProperty("nameEvent")
 	private String nameEvent;
-	@JsonProperty("descriptionEvent")
 	private String descriptionEvent;
-	@JsonProperty("gallery")
 	private ArrayList<Image> gallery;
-	@JsonProperty("eventInterests")
 	private ArrayList<Interest> eventInterests;
-	@JsonProperty("regulations")
 	private ArrayList<Rule> regulations;
 
 	public EventInside() {
@@ -148,6 +138,19 @@ public class EventInside {
 	}
 
 	public void insertIntoDataBase() throws SQLException {
+		insertEventIntoDatabaseBasic();
+		for (int i = 0; i < gallery.size(); i++) {
+			insertGalleryIntoDatabase(gallery.get(i));
+		}
+		for (int i = 0; i < regulations.size(); i++) {
+			insertRegulationIntoDatabase(regulations.get(i));
+		}
+		for (int i = 0; i < eventInterests.size(); i++) {
+			insertEventInterestsIntoDatabase(eventInterests.get(i));
+		}
+	}
+
+	public void insertEventIntoDatabaseBasic() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
 				.prepareStatement("INSERT INTO EVENTS VALUES(?, ?, ?, ?, ?, ?, ?)");
 		preparedStatement.setString(1, this.idEvent);
@@ -158,15 +161,6 @@ public class EventInside {
 		preparedStatement.setString(6, this.nameEvent);
 		preparedStatement.setString(7, this.descriptionEvent);
 		preparedStatement.execute();
-		for (int i = 0; i < gallery.size(); i++) {
-			insertGalleryIntoDatabase(gallery.get(i));
-		}
-		for (int i = 0; i < regulations.size(); i++) {
-			insertRegulationIntoDatabase(regulations.get(i));
-		}
-		for (int i = 0; i < eventInterests.size(); i++) {
-			insertEventInterestsIntoDatabase(eventInterests.get(i));
-		}
 	}
 
 	public void insertRegulationIntoDatabase(Rule rule) throws SQLException {
@@ -200,11 +194,12 @@ public class EventInside {
 				.executeQuery("SELECT * FROM EVENTS");
 		while (resultSet.next()) {
 			idEvents.add(resultSet.getString(1));
-			
 		}
 		for (String idEvent : idEvents) {
 			EventInside event = searchEventIntoDatabase(idEvent);
 			events.add(event);
+			System.out.println(events.get(events.size()-1));
+
 		}
 		return events;
 	}
