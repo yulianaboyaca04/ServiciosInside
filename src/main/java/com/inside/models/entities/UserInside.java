@@ -6,17 +6,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
 public class UserInside {
 	
+	@JsonProperty("idUser")
 	private String idUser;
+	@JsonProperty("credential")
 	private Credentials credential;
+	@JsonProperty("image")
 	private Image image;
+	@JsonProperty("nameUser")
 	private String nameUser;
+	@JsonProperty("lastName")
 	private String lastName;
+	@JsonProperty("birthDate")
 	private Date birthDate;
+	@JsonProperty("nickename")
 	private String nickename;
+	@JsonProperty("userInteres")
 	private ArrayList<Interest> userInteres;
 	
 	public UserInside(String idUser, Credentials credential, Image image, String nameUser, String lastName,
