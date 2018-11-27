@@ -16,7 +16,7 @@ public class InsideApplication {
 	public static void main(String[] args) {
 		InsideManager.getInstance();
 		//Cambia la propiedad del puerto
-		System.setProperty("server.port", "8092");
+		System.setProperty("server.port", "5000");
 		//lanza los servicios de la aplicacion
 		SpringApplication.run(InsideApplication.class, args);
 	}

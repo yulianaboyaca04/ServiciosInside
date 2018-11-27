@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inside.exceptions.UserAlreadyExists;
 import com.inside.models.dao.InsideManager;
 import com.inside.models.dao.UsersManager;
+import com.inside.models.dto.EventDTO;
+import com.inside.models.dto.UserDTO;
 import com.inside.models.entities.Credentials;
+import com.inside.models.entities.EventInside;
 import com.inside.models.entities.Image;
 import com.inside.models.entities.User;
 import com.inside.models.entities.UserInside;
@@ -27,37 +30,20 @@ import com.inside.persistence.JsonManager;
 @RestController
 public class UsersController {
 
-	/**
-	 * String idUser, Credentials credential, Image image, String nameUser, String lastName,
-			Date birthDate, String nickename
-	 */
-	@RequestMapping(value = "/registerUser", method = RequestMethod.POST)
-	public String registerUser(@RequestParam(value = "idUser", defaultValue = "") String idUser, 
-			@RequestParam(value = "credentials", defaultValue = "") Credentials credential,
-			@RequestParam(value = "image", defaultValue = "") Image image,
-			@RequestParam(value = "nameUser", defaultValue = "") String nameUser,
-			@RequestParam(value = "lastName", defaultValue = "") String lastName,
-			@RequestParam(value = "birthDate", defaultValue = "") Date birthDate,
-			@RequestParam(value = "nickname", defaultValue = "") String nickname) {
-//		UserInside userInside;
-//		try {
-//			userInside = InsideManager.getInstance().createUser(idUser, credential, image, nameUser, lastName, birthDate, nickname, null);
-//			System.out.println(userInside.toString());
-//			userInside.insertIntoDataBase();
-//			return userInside.toString();
-//		} catch (UserAlreadyExists | SQLException e) {
-//			return e.getMessage();
-//		}
-		return null;
-	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-	public String createUser() {
-		return "//TODO";
+	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
+	public String createUser(@Valid @RequestBody UserDTO userDTO) {
+		UserInside user = null;
+			try {
+				user = userDTO.generateEvent();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		return JsonManager.printJson(user);
 	}
 
 	/**
@@ -140,6 +126,7 @@ public class UsersController {
 	 * @return mensaje tipo log de lo sucedido
 	 */
 	//http://localhost:8092/createUser?idUser=1&nameUser=Yuliana&lastName=Boyaca&birhtDate=04,16,1999&email=Yuli@gmail.com&password=cuchurrumino&nickname=yuli
+	@RequestMapping("/registerUserOld")
 	public String createUser(
 			@RequestParam(value = "idUser", defaultValue = "") String idUser, 
 			@RequestParam(value = "nameUser", defaultValue = "") String nameUser,
