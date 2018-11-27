@@ -3,8 +3,6 @@ package com.inside.models.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import com.inside.persistence.DataBaseAcces;
 
 public class Interest {

@@ -14,75 +14,75 @@ import com.inside.models.entities.UserInside;
 @RestController
 public class InsideController {
 
-	/**
-	 * 
-	 */
-	@RequestMapping(value = "/registerUser", method = RequestMethod.POST)
-	public String registerUser() {
-		return "//TODO";
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/createUsera", method = RequestMethod.POST)
-	public String createUser() {
-		return "//TODO";
-	}
-
-	/**
-	 * 
-	 */
-	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public String editUser() {
-		return "//TODO";
-	}
-
-	/**
-	 * 
-	 */
-	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public String deleteUser() {
-		return "//TODO";
-
-	}
-
-	@RequestMapping(value = "/searchUser", method = RequestMethod.GET)
-	public String searchUser() {
-		return "//TODO";
-
-	}
-
-	@RequestMapping(value = "/deactivateUser", method = RequestMethod.POST)
-	public String deactivateUser() {
-		return "//TODO";
-
-	}
+//	/**
+//	 * 
+//	 */
+//	@RequestMapping(value = "/registerUser", method = RequestMethod.POST)
+//	public String registerUser() {
+//		return "//TODO";
+//	}
+//
+//	/**
+//	 * 
+//	 * @return
+//	 */
+//	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
+//	public String createUser() {
+//		return "//TODO";
+//	}
+//
+//	/**
+//	 * 
+//	 */
+//	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
+//	public String editUser() {
+//		return "//TODO";
+//	}
+//
+//	/**
+//	 * 
+//	 */
+//	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
+//	public String deleteUser() {
+//		return "//TODO";
+//
+//	}
+//
+//	@RequestMapping(value = "/searchUser", method = RequestMethod.GET)
+//	public String searchUser() {
+//		return "//TODO";
+//
+//	}
+//
+//	@RequestMapping(value = "/deactivateUser", method = RequestMethod.POST)
+//	public String deactivateUser() {
+//		return "//TODO";
+//
+//	}
 
 	// ---------------------------------event-------------------------
 
-	@RequestMapping(value = "/createEventa", method = RequestMethod.POST)
-	public String createEvent() {
-		return "//TODO";
-	}
-
-	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)
-	public String editEvent() {
-		return "//TODO";
-	}
-
-	@RequestMapping(value = "/deleteEvent", method = RequestMethod.POST)
-	public String deleteEvent() {
-		return "//TODO";
-
-	}
-
-	@RequestMapping(value = "/searchEvent", method = RequestMethod.GET)
-	public String searchEvent() {
-		return "//TODO";
-
-	}
+//	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
+//	public String createEvent() {
+//		return "//TODO";
+//	}
+//
+//	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)
+//	public String editEvent() {
+//		return "//TODO";
+//	}
+//
+//	@RequestMapping(value = "/deleteEvent", method = RequestMethod.POST)
+//	public String deleteEvent() {
+//		return "//TODO";
+//
+//	}
+//
+//	@RequestMapping(value = "/searchEvent", method = RequestMethod.GET)
+//	public String searchEvent() {
+//		return "//TODO";
+//
+//	}
 
 	// ------------------------------------------------------------------------------
 

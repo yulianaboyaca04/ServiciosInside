@@ -7,8 +7,11 @@ public class PruebaPersistenciaCesar {
 	
 	public static void main(String[] args) {
 		
-		EventInside ev = InsideManager.getInstance().searchEvent("1");
-		System.out.println(JsonManager.printJson(ev));
+//		EventInside ev = InsideManager.getInstance().searchEvent("1");
+//		System.out.println(JsonManager.printJson(ev));
 		
+		
+//		System.out.println();
+		System.out.println(JsonManager.printJson(InsideManager.getInstance().listAllEvents()));
 	}
 }

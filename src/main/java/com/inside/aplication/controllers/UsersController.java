@@ -24,6 +24,91 @@ import com.inside.persistence.JsonManager;
 public class UsersController {
 
 	/**
+	 * 
+	 */
+	@RequestMapping(value = "/registerUser", method = RequestMethod.POST)
+	public String registerUser() {
+		return "//TODO";
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
+	public String createUser() {
+		return "//TODO";
+	}
+
+	/**
+	 * 
+	 */
+	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
+	public String editUser() {
+		return "//TODO";
+	}
+
+	/**
+	 * 
+	 */
+	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
+	public String deleteUser() {
+		return "//TODO";
+
+	}
+
+	@RequestMapping(value = "/searchUser", method = RequestMethod.GET)
+	public String searchUser() {
+		return "//TODO";
+
+	}
+
+	@RequestMapping(value = "/deactivateUser", method = RequestMethod.POST)
+	public String deactivateUser() {
+		return "//TODO";
+
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
 	 * metodo que permite crear usuarios mediante el metodo post
 	 * @param idUser
 	 * @param nameUser
@@ -73,7 +158,8 @@ public class UsersController {
 	 * 
 	 * @return jSon lista de eventos
 	 */
-	@RequestMapping("/getUsers") 
+	@RequestMapping("/getUsersOld"
+			+ "") 
 	public String getUsers() {
 		return JsonManager.printJson(UsersManager.getInstance().getUsers());
 	}

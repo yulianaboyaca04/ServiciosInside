@@ -98,6 +98,17 @@ public class InsideManager {
 	}
 
 	// ---------------------------------event-------------------------
+	
+	public ArrayList<EventInside> listAllEvents(){
+		try {
+			return EventInside.listAllEvents();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	/**
 	 * Crea un evento
 	 * @param idEvent

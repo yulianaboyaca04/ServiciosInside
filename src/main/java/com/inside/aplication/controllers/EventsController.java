@@ -21,12 +21,59 @@ import com.inside.persistence.JsonManager;
 @RestController
 public class EventsController {
 
+	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
+	public String createEvent() {
+		return "//TODO";
+	}
+
+	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)
+	public String editEvent() {
+		return "//TODO";
+	}
+
+	@RequestMapping(value = "/deleteEvent", method = RequestMethod.POST)
+	public String deleteEvent() {
+		return "//TODO";
+
+	}
+
+	@RequestMapping(value = "/searchEvent", method = RequestMethod.GET)
+	public String searchEvent() {
+		return "//TODO";
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * retorna la lista de todos los eventos creados con la aplicacion
 	 * 
 	 * @return jSon lista de eventos
 	 */
-	@RequestMapping("/getEvents")
+	@RequestMapping("/getEventsOld")
 	public String getEvents() {
 		return JsonManager.printJson(EventsManager.getInstance().getEvents());
 	}
@@ -65,7 +112,6 @@ public class EventsController {
 	 * @param howToBuy
 	 * @return mensaje tipo log de lo sucedido
 	 */
-	// http://localhost:8092/createEvent?idEvent=1&idCity=123&idUserCreator=1&nameEvent=1&coordinates=10,1&capacity=123&dateStart=ma%C3%B1ana&dateFinish=pasadoma%C3%B1ana&descriptionEvent=va%20a%20estar%20bueno&rules=ninugna&price=0&howToBou=no%20aplica
 	@RequestMapping("/createEvent")
 	public String createUser(@RequestParam(value = "idEvent", defaultValue = "") String idEvent,
 			@RequestParam(value = "idCity", defaultValue = "") String idCity,
