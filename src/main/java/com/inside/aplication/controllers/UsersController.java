@@ -39,15 +39,16 @@ public class UsersController {
 			@RequestParam(value = "lastName", defaultValue = "") String lastName,
 			@RequestParam(value = "birthDate", defaultValue = "") Date birthDate,
 			@RequestParam(value = "nickname", defaultValue = "") String nickname) {
-		UserInside userInside;
-		try {
-			userInside = InsideManager.getInstance().createUser(idUser, credential, image, nameUser, lastName, birthDate, nickname, null);
-			System.out.println(userInside.toString());
-			userInside.insertIntoDataBase();
-			return userInside.toString();
-		} catch (UserAlreadyExists | SQLException e) {
-			return e.getMessage();
-		}
+//		UserInside userInside;
+//		try {
+//			userInside = InsideManager.getInstance().createUser(idUser, credential, image, nameUser, lastName, birthDate, nickname, null);
+//			System.out.println(userInside.toString());
+//			userInside.insertIntoDataBase();
+//			return userInside.toString();
+//		} catch (UserAlreadyExists | SQLException e) {
+//			return e.getMessage();
+//		}
+		return null;
 	}
 
 	/**
