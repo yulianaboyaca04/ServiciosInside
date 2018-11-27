@@ -5,19 +5,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
 public class EventInside {
 
+	@JsonProperty("idEvent")
 	private String idEvent;
+	@JsonProperty("userCreator")
 	private UserInside userCreator;
+	@JsonProperty("howToBuy")
 	private HowToBuy howToBuy;
+	@JsonProperty("address")
 	private Address address;
+	@JsonProperty("eventDate")
 	private EventDate eventDate;
+	@JsonProperty("nameEvent")
 	private String nameEvent;
+	@JsonProperty("descriptionEvent")
 	private String descriptionEvent;
+	@JsonProperty("gallery")
 	private ArrayList<Image> gallery;
+	@JsonProperty("eventInterests")
 	private ArrayList<Interest> eventInterests;
+	@JsonProperty("regulations")
 	private ArrayList<Rule> regulations;
 
 	public EventInside() {

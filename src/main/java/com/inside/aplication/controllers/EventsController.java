@@ -138,7 +138,7 @@ public class EventsController {
 	 * @param event
 	 * @return mensaje tipo log de lo sucedido
 	 */
-	@RequestMapping(value = "/createEvent", method = RequestMethod.POST)
+	@RequestMapping(value = "/createEventOld", method = RequestMethod.POST)
 	public String createEvent(@Valid @RequestBody Event event) {
 		System.out.println(JsonManager.printJson(event));
 		EventsManager.getInstance().addEvent(event);

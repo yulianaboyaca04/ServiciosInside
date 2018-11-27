@@ -5,12 +5,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
 public class EventDate {
-
+	
+	@JsonProperty("idDate")
 	private String idDate;
+	@JsonProperty("dateStart")
 	private Timestamp dateStart;
+	@JsonProperty("dateFinish")
 	private Timestamp dateFinish;
 
 	public EventDate() {
@@ -53,7 +57,8 @@ public class EventDate {
 	}
 
 	public void insertIntoDataBase() throws SQLException {
-		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO DATES VALUES(?,?,?)");
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO DATES VALUES(?,?,?)");
 		preparedStatement.setString(1, this.idDate);
 		preparedStatement.setTimestamp(2, this.dateStart);
 		preparedStatement.setTimestamp(3, this.dateFinish);

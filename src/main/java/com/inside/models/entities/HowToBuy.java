@@ -4,13 +4,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
 public class HowToBuy {
 
+	@JsonProperty("idHowToBuy")
 	private String idHowToBuy;
+	@JsonProperty("descriptionHowToBuy")
 	private String descriptionHowToBuy;
+	@JsonProperty("inPresence")
 	private boolean inPresence;
+	@JsonProperty("price")
 	private float price;
 
 	public HowToBuy() {
@@ -74,7 +79,7 @@ public class HowToBuy {
 
 	public static HowToBuy searchHowToBuyIntoDatabase(String idHowToBuy, ResultSet resultSet) throws SQLException {
 		resultSet.close();
-		 resultSet = DataBaseAcces.getInstance().getStatement()
+		resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM HOW_TO_BUY WHERE id_how_to_buy='" + idHowToBuy + "'");
 		HowToBuy howToBuy = new HowToBuy();
 		while (resultSet.next()) {

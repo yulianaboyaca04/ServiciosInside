@@ -4,14 +4,20 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
 public class Address {
 
+	@JsonProperty("idAddress")
 	private String idAddress;
+	@JsonProperty("latitude")
 	private float latitude;
+	@JsonProperty("longitude")
 	private float longitude;
+	@JsonProperty("nameCity")
 	private String nameCity;
+	@JsonProperty("namePlace")
 	private String namePlace;
 
 	public Address() {
