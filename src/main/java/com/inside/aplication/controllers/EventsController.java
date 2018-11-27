@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import javax.validation.Valid;
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.inside.models.dao.EventsManager;
 import com.inside.models.dao.InsideManager;
-import com.inside.models.dto.EventDTO;
 import com.inside.models.entities.Event;
 import com.inside.models.entities.EventInside;
 import com.inside.persistence.JsonManager;
@@ -27,14 +25,19 @@ import com.inside.persistence.JsonManager;
 public class EventsController {
 
 	@RequestMapping(value = "/createEventInside", method = RequestMethod.POST)
-	public String createEvent(@Valid @RequestBody EventDTO eventDTO) {
-		EventInside event = null;
+	public String createEvent(@Valid @RequestBody EventInside event) {
+		//			address.insertIntoDataBase();owToBuy.insertIntoDataBase();
+//			EventInside event = eventDTO.generateEvent();
+//			event.setAddress(address);
+//			event.setHowToBuy(howToBuy);
 		try {
-			event = eventDTO.generateEvent();
+			event.insertIntoDataBase();
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return JsonManager.printJson(event);
+		
 //		
 //		InsideManager.getInstance().registerEvent(event);
 //		return JsonManager.printJson(event); // TODO cambiar por un log de la creacion
@@ -56,32 +59,7 @@ public class EventsController {
 		EventInside ev = InsideManager.getInstance().searchEvent(idEvent);
 		return JsonManager.printJson(ev);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * retorna la lista de todos los eventos creados con la aplicacion
 	 * 
@@ -91,22 +69,11 @@ public class EventsController {
 	public String getEvents() {
 		return JsonManager.printJson(EventsManager.getInstance().getEvents());
 	}
-	
+
 	/*
-	 {
-	"idEvent": "1",
-	"idCity": "1",
-	"idUserCreator": "1",
-	"nameEvent": "1",
-	"coordinates": "1",
-	"capacity": "1",
-	"dateStart": "1",
-	"dateFinish": "1",
-	"descriptionEvent": "1",
-	"rules": "1",
-	"price": "1",
-	"howToBuy": "1"
-	}
+	 * { "idEvent": "1", "idCity": "1", "idUserCreator": "1", "nameEvent": "1",
+	 * "coordinates": "1", "capacity": "1", "dateStart": "1", "dateFinish": "1",
+	 * "descriptionEvent": "1", "rules": "1", "price": "1", "howToBuy": "1" }
 	 */
 
 	/**
@@ -139,8 +106,8 @@ public class EventsController {
 			@RequestParam(value = "rules", defaultValue = "") String rules,
 			@RequestParam(value = "price", defaultValue = "") String price,
 			@RequestParam(value = "howToBuy", defaultValue = "") String howToBuy) {
-		Event ev = EventsManager.getInstance().createEvent(idEvent, idCity, idUserCreator, nameEvent, coordinates, capacity, dateStart,
-				dateFinish, descriptionEvent, rules, price, howToBuy);
+		Event ev = EventsManager.getInstance().createEvent(idEvent, idCity, idUserCreator, nameEvent, coordinates,
+				capacity, dateStart, dateFinish, descriptionEvent, rules, price, howToBuy);
 		EventsManager.getInstance().addEvent(ev);
 		System.out.println(ev.toString());
 		return ev.toString();// TODO cambiar por un log de la creacion

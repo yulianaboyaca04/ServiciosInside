@@ -10,15 +10,25 @@ import com.inside.persistence.DataBaseAcces;
 
 public class EventInside {
 
+	@JsonProperty("idEvent")
 	private String idEvent;
+	@JsonProperty("userCreator")
 	private UserInside userCreator;
+	@JsonProperty("howToBuy")
 	private HowToBuy howToBuy;
+	@JsonProperty("address")
 	private Address address;
+	@JsonProperty("eventDate")
 	private EventDate eventDate;
+	@JsonProperty("nameEvent")
 	private String nameEvent;
+	@JsonProperty("descriptionEvent")
 	private String descriptionEvent;
+	@JsonProperty("gallery")
 	private ArrayList<Image> gallery;
+	@JsonProperty("eventInterests")
 	private ArrayList<Interest> eventInterests;
+	@JsonProperty("regulations")
 	private ArrayList<Rule> regulations;
 
 	public EventInside() {
@@ -187,23 +197,22 @@ public class EventInside {
 		preparedStatement.execute();
 	}
 
-	public static ArrayList<EventInside> listAllEvents() throws SQLException{
+	public static ArrayList<EventInside> listAllEvents() throws SQLException {
 		ArrayList<EventInside> events = new ArrayList<>();
 		ArrayList<String> idEvents = new ArrayList<>();
-		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
-				.executeQuery("SELECT * FROM EVENTS");
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM EVENTS");
 		while (resultSet.next()) {
 			idEvents.add(resultSet.getString(1));
 		}
 		for (String idEvent : idEvents) {
 			EventInside event = searchEventIntoDatabase(idEvent);
 			events.add(event);
-			System.out.println(events.get(events.size()-1));
+			System.out.println(events.get(events.size() - 1));
 
 		}
 		return events;
 	}
-	
+
 	public static EventInside searchEventIntoDatabase(String codigo) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM EVENTS WHERE id_event='" + codigo + "'");
@@ -278,7 +287,7 @@ public class EventInside {
 			Rule rule = Rule.searchRuleIntoDatabase(idRule, resultSet);
 			regulation.add(rule);
 		}
-		
+
 		return regulation;
 	}
 }
