@@ -31,6 +31,9 @@ public class EventsController {
 //			event.setAddress(address);
 //			event.setHowToBuy(howToBuy);
 		try {
+			event.getAddress().insertIntoDataBase();
+			event.getHowToBuy().insertIntoDataBase();
+			event.getEventDate().insertIntoDataBase();
 			event.insertIntoDataBase();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

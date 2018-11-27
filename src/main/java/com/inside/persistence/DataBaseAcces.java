@@ -45,5 +45,14 @@ public class DataBaseAcces {
 		this.statement = statement;
 	}
 
-	
+	//---------------------------------------------------------------------------------------
+	public static String getKeyNextVal(String tableName, String columName) throws SQLException {
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT "+ columName.toUpperCase() + " FROM " +  tableName.toUpperCase() + " ORDER BY " + columName.toUpperCase() + " *1");
+		String idMax = "";
+		while (resultSet.next()) {
+			idMax = resultSet.getString(1);
+		}
+		return idMax;
+	}
 }
