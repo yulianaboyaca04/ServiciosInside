@@ -8,20 +8,20 @@ import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
 import com.inside.models.entities.EventDate;
-import com.inside.models.entities.EventInside;
+import com.inside.models.entities.Event;
 import com.inside.models.entities.HowToBuy;
 import com.inside.models.entities.Image;
 import com.inside.models.entities.Interest;
 import com.inside.models.entities.Rule;
 import com.inside.models.entities.Suscription;
-import com.inside.models.entities.UserInside;
+import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
 
 
 public class InsideManager {
 
-	private ArrayList<EventInside> events;
-	private ArrayList<UserInside> users;
+	private ArrayList<Event> events;
+	private ArrayList<User> users;
 	private ArrayList<Suscription> suscriptions;
 	private ArrayList<AttendanceHistory> attendanceHistory;
 	private ArrayList<ViewsHistory> viewsHistory;
@@ -42,7 +42,7 @@ public class InsideManager {
 
 	private InsideManager () {
 		try {
-			events = EventInside.listAllEvents();
+			events = Event.listAllEvents();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +58,7 @@ public class InsideManager {
 	 * registra el usuario en la base de datos
 	 * @param userInside
 	 */
-	public void registerUser(UserInside userInside) {
+	public void registerUser(User userInside) {
 		try {
 			userInside.insertIntoDataBase();
 		} catch (SQLException e) {
@@ -79,9 +79,9 @@ public class InsideManager {
 	 * @param userInteres
 	 * @return
 	 */
-	public UserInside createUser(String idUser, Credentials credential, Image image, String nameUser, String lastName,
+	public User createUser(String idUser, Credentials credential, Image image, String nameUser, String lastName,
 			Date birthDate, String nickename, ArrayList<Interest> userInteres) {
-		UserInside userInside =  new UserInside(idUser, credential, image, nameUser, lastName, birthDate, nickename, userInteres);
+		User userInside =  new User(idUser, credential, image, nameUser, lastName, birthDate, nickename, userInteres);
 		return userInside;
 	}
 
@@ -117,10 +117,10 @@ public class InsideManager {
 	 * @param regulations
 	 * @return
 	 */
-	public EventInside createEvent(String idEvent, UserInside userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
+	public Event createEvent(String idEvent, User userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
 			String nameEvent, String descriptionEvent, ArrayList<Image> gallery, ArrayList<Interest> eventInterests,
 			ArrayList<Rule> regulations) {
-		EventInside eventInside = new EventInside(idEvent, userCreator, howToBuy, address, eventDate, nameEvent, descriptionEvent, gallery, eventInterests, regulations);
+		Event eventInside = new Event(idEvent, userCreator, howToBuy, address, eventDate, nameEvent, descriptionEvent, gallery, eventInterests, regulations);
 		return eventInside;
 	}
 	
@@ -128,7 +128,7 @@ public class InsideManager {
 	 * Registra el evento en la base de datos
 	 * @param eventInside
 	 */
-	public void registerEvent(EventInside eventInside) {
+	public void registerEvent(Event eventInside) {
 		try {
 			eventInside.insertIntoDataBase();
 		} catch (SQLException e) {
@@ -145,10 +145,10 @@ public class InsideManager {
 
 	}
 
-	public EventInside searchEvent(String idEvent) {
-		EventInside event = null;
+	public Event searchEvent(String idEvent) {
+		Event event = null;
 		try {
-			event = EventInside.searchEventIntoDatabase(idEvent);
+			event = Event.searchEventIntoDatabase(idEvent);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -158,15 +158,15 @@ public class InsideManager {
 
 	//------------------------------------------------------------------------------
 
-	public void subscribeToEvent(UserInside user, EventInside event) {
+	public void subscribeToEvent(User user, Event event) {
 
 	}
 
-	public void registerAttendanceToEvent(UserInside user, EventInside event) {
+	public void registerAttendanceToEvent(User user, Event event) {
 
 	}
 
-	public void registerViewToEvent(UserInside user, EventInside event) {
+	public void registerViewToEvent(User user, Event event) {
 
 	}
 	
@@ -182,12 +182,12 @@ public class InsideManager {
 	}
 	
 	//----------------------------------getters&setters---------------------------------
-	public ArrayList<EventInside> getEvents() {
+	public ArrayList<Event> getEvents() {
 		return events;
 	}
 
 
-	public ArrayList<UserInside> getUsers() {
+	public ArrayList<User> getUsers() {
 		return users;
 	}
 

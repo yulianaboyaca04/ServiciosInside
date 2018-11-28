@@ -9,7 +9,7 @@ import java.sql.Date;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
-public class UserInside {
+public class User {
 	
 	@JsonProperty("idUser")
 	private String idUser;
@@ -28,7 +28,7 @@ public class UserInside {
 	@JsonProperty("userInteres")
 	private ArrayList<Interest> userInteres;
 	
-	public UserInside(String idUser, Credentials credential, Image image, String nameUser, String lastName,
+	public User(String idUser, Credentials credential, Image image, String nameUser, String lastName,
 			Date birthDate, String nickname, ArrayList<Interest> userInteres) {
 		this.idUser = idUser;
 		this.credential = credential;
@@ -43,7 +43,7 @@ public class UserInside {
 		}
 	}
 	
-	public UserInside() {
+	public User() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -141,10 +141,10 @@ public class UserInside {
 		preparedStatement.execute();
 	}
 	
-	public static UserInside searchUserIntoDatabase(String codigo) throws SQLException {
+	public static User searchUserIntoDatabase(String codigo) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM USERS WHERE ID_USER='" + codigo + "'");
-		UserInside userInside = new UserInside();
+		User userInside = new User();
 		while (resultSet.next()) {
 			userInside.idUser = resultSet.getString(1);
 			userInside.nameUser = resultSet.getString(4);

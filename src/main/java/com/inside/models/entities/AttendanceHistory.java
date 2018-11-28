@@ -7,31 +7,31 @@ import com.inside.persistence.DataBaseAcces;
 
 public class AttendanceHistory {
 
-	private UserInside user;
-	private EventInside event;
+	private User user;
+	private Event event;
 	
 	public AttendanceHistory() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public AttendanceHistory(UserInside user, EventInside event) {
+	public AttendanceHistory(User user, Event event) {
 		this.user = user;
 		this.event = event;
 	}
 
-	public UserInside getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserInside user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public EventInside getEvent() {
+	public Event getEvent() {
 		return event;
 	}
 
-	public void setEvent(EventInside event) {
+	public void setEvent(Event event) {
 		this.event = event;
 	}
 

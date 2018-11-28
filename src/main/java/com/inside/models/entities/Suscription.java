@@ -8,10 +8,10 @@ import com.inside.persistence.DataBaseAcces;
 public class Suscription {
 
 	private String idSusciption;
-	private UserInside user;
-	private EventInside event;
+	private User user;
+	private Event event;
 	
-	public Suscription(String idSusciption, UserInside user, EventInside event) {
+	public Suscription(String idSusciption, User user, Event event) {
 		this.idSusciption = idSusciption;
 		this.user = user;
 		this.event = event;
@@ -25,19 +25,19 @@ public class Suscription {
 		this.idSusciption = idSusciption;
 	}
 
-	public UserInside getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserInside user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public EventInside getEvent() {
+	public Event getEvent() {
 		return event;
 	}
 
-	public void setEvent(EventInside event) {
+	public void setEvent(Event event) {
 		this.event = event;
 	}
 

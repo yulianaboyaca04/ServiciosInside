@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
-public class EventInside {
+public class Event {
 
 	@JsonProperty("idEvent")
 	private String idEvent;
 	@JsonProperty("userCreator")
-	private UserInside userCreator;
+	private User userCreator;
 	@JsonProperty("howToBuy")
 	private HowToBuy howToBuy;
 	@JsonProperty("address")
@@ -32,11 +32,11 @@ public class EventInside {
 	private ArrayList<Rule> regulations;
 
 	//-------------------------------Constructors---------------------------------------------------------------------
-	public EventInside() {
+	public Event() {
 
 	}
 
-	public EventInside(String idEvent, UserInside userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
+	public Event(String idEvent, User userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
 			String nameEvent, String descriptionEvent, ArrayList<Image> gallery, ArrayList<Interest> eventInterests,
 			ArrayList<Rule> regulations) {
 		this.idEvent = idEvent;
@@ -112,24 +112,24 @@ public class EventInside {
 	}
 
 	//----------------------------------querys en bd------------------------------------------------------------------
-	public static ArrayList<EventInside> listAllEvents() throws SQLException {
-		ArrayList<EventInside> events = new ArrayList<>();
+	public static ArrayList<Event> listAllEvents() throws SQLException {
+		ArrayList<Event> events = new ArrayList<>();
 		ArrayList<String> idEvents = new ArrayList<>();
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM EVENTS");
 		while (resultSet.next()) {
 			idEvents.add(resultSet.getString(1));
 		}
 		for (String idEvent : idEvents) {
-			EventInside event = searchEventIntoDatabase(idEvent);
+			Event event = searchEventIntoDatabase(idEvent);
 			events.add(event);
 		}
 		return events;
 	}
 
-	public static EventInside searchEventIntoDatabase(String codigo) throws SQLException {
+	public static Event searchEventIntoDatabase(String codigo) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM EVENTS WHERE id_event='" + codigo + "'");
-		EventInside event = new EventInside();
+		Event event = new Event();
 		while (resultSet.next()) {
 			event = generateEventFromResultSet(resultSet);
 			break;
@@ -137,8 +137,8 @@ public class EventInside {
 		return event;
 	}
 
-	private static EventInside generateEventFromResultSet(ResultSet resultSet) throws SQLException {
-		EventInside event = new EventInside();
+	private static Event generateEventFromResultSet(ResultSet resultSet) throws SQLException {
+		Event event = new Event();
 
 		event.idEvent = resultSet.getString(1);
 		event.nameEvent = resultSet.getString(6);
@@ -147,7 +147,7 @@ public class EventInside {
 		String idAdrress = resultSet.getString(4);
 		String idEventDate = resultSet.getString(5);
 
-		event.userCreator = UserInside.searchUserIntoDatabase(resultSet.getString(2));
+		event.userCreator = User.searchUserIntoDatabase(resultSet.getString(2));
 		event.howToBuy = HowToBuy.searchHowToBuyIntoDatabase(idHowToBuy, resultSet);
 		event.address = Address.searchAddressIntoDatabase(idAdrress, resultSet);
 		event.eventDate = EventDate.searchEventDateIntoDatabase(idEventDate, resultSet);
@@ -213,11 +213,11 @@ public class EventInside {
 		this.idEvent = idEvent;
 	}
 
-	public UserInside getUserCreator() {
+	public User getUserCreator() {
 		return userCreator;
 	}
 
-	public void setUserCreator(UserInside userCreator) {
+	public void setUserCreator(User userCreator) {
 		this.userCreator = userCreator;
 	}
 

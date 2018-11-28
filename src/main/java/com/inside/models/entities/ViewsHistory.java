@@ -6,34 +6,34 @@ import javax.swing.text.View;
 
 public class ViewsHistory {
 
-	private UserInside user;
-	private EventInside event;
+	private User user;
+	private Event event;
 	private Date viewDate;
 	
 	public ViewsHistory() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ViewsHistory(UserInside user, EventInside event, Date viewDate) {
+	public ViewsHistory(User user, Event event, Date viewDate) {
 		super();
 		this.user = user;
 		this.event = event;
 		this.viewDate = viewDate;
 	}
 
-	public UserInside getUser() {
+	public User getUser() {
 		return user;
 	}
 
-	public void setUser(UserInside user) {
+	public void setUser(User user) {
 		this.user = user;
 	}
 
-	public EventInside getEvent() {
+	public Event getEvent() {
 		return event;
 	}
 
-	public void setEvent(EventInside event) {
+	public void setEvent(Event event) {
 		this.event = event;
 	}
 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.inside.models.entities.UserInside;
+import com.inside.models.entities.User;
 import com.inside.persistence.JsonManager;
 /**
  * 
@@ -24,8 +24,8 @@ public class UsersController {
 	 * @return
 	 */
 	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
-	public String createUser(@Valid @RequestBody UserInside userInside) {
-		UserInside user = null;
+	public String createUser(@Valid @RequestBody User userInside) {
+		User user = null;
 			try {
 				//user.getCredential().insertIntoDataBase();
 				user.getImage().insertIntoDataBase();

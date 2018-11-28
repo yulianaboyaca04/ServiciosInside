@@ -11,14 +11,14 @@ import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
 import com.inside.models.entities.CredentialsType;
 import com.inside.models.entities.EventDate;
-import com.inside.models.entities.EventInside;
+import com.inside.models.entities.Event;
 import com.inside.models.entities.HowToBuy;
 import com.inside.models.entities.Image;
 import com.inside.models.entities.Interest;
 import com.inside.models.entities.Rule;
 import com.inside.models.entities.RulesType;
 import com.inside.models.entities.Suscription;
-import com.inside.models.entities.UserInside;
+import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
 
 public class PruebaPersistenciaYuli {
@@ -29,13 +29,13 @@ public class PruebaPersistenciaYuli {
 	public AttendanceHistory ah;
 	public Credentials cr;
 	public CredentialsType cT;
-	public EventInside ev;
+	public Event ev;
 	public EventDate ed;
 	public Interest interest;
 	public Rule rule;
 	public RulesType rt;
 	public Suscription sus;
-	public UserInside uI;
+	public User uI;
 	public ViewsHistory vh;
 	
 /*
@@ -54,7 +54,7 @@ public class PruebaPersistenciaYuli {
 	
 	private void testSearchPersistence() {
 		try {
-			UserInside userInside = UserInside.searchUserIntoDatabase("42");
+			User userInside = User.searchUserIntoDatabase("42");
 			System.out.println(JsonManager.printJson(userInside));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -68,7 +68,7 @@ public class PruebaPersistenciaYuli {
 		adre = new Address("20", 247, 244, "Duitama", "B.solano");
 		
 		ed = new EventDate("39", new Timestamp(System.currentTimeMillis()), new Timestamp(System.currentTimeMillis()+10000));
-		uI= new UserInside();
+		uI= new User();
 		img =  new Image("30", "soy nico en un string");
 		
 		cT =  new CredentialsType("20", "facebook");
@@ -102,9 +102,9 @@ public class PruebaPersistenciaYuli {
 		gallery.add(img);
 		
 		GregorianCalendar d = new GregorianCalendar(1996, GregorianCalendar.DECEMBER, 9);
-		uI =  new UserInside("42",cr,img,"Yuli","cardozo", new Date(d.getTimeInMillis()),"nico",arrayInteres);
+		uI =  new User("42",cr,img,"Yuli","cardozo", new Date(d.getTimeInMillis()),"nico",arrayInteres);
 		//------ fin user----//
-		ev = new EventInside("12",uI,htb,adre,ed,"Aginaldo Samaquence","Esto se va descontrolar",gallery,arrayInteres,arrayRules);
+		ev = new Event("12",uI,htb,adre,ed,"Aginaldo Samaquence","Esto se va descontrolar",gallery,arrayInteres,arrayRules);
 //		System.out.println(ev.toString());
 	//	uI= new UserInside(idUser, credential, image, nameUser, lastName, birthDate, nikename, userInteres)
 		

@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inside.models.dao.InsideManager;
-import com.inside.models.entities.EventInside;
-import com.inside.models.entities.UserInside;
+import com.inside.models.entities.Event;
+import com.inside.models.entities.User;
 import com.inside.persistence.JsonManager;
 
 /**
@@ -96,19 +96,19 @@ public class InsideController {
 	// ------------------------------------------------------------------------------
 
 	@RequestMapping(value = "/subscribeToEvent", method = RequestMethod.POST)
-	public String subscribeToEvent(UserInside user, EventInside event) {
+	public String subscribeToEvent(User user, Event event) {
 		return "//TODO";
 
 	}
 
 	@RequestMapping(value = "/registerAttendanceToEvent", method = RequestMethod.POST)
-	public String registerAttendanceToEvent(UserInside user, EventInside event) {
+	public String registerAttendanceToEvent(User user, Event event) {
 		return "//TODO";
 
 	}
 
 	@RequestMapping(value = "/registerViewToEvent", method = RequestMethod.POST)
-	public String registerViewToEvent(UserInside user, EventInside event) {
+	public String registerViewToEvent(User user, Event event) {
 		return "//TODO";
 
 	}

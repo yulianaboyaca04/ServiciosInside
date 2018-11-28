@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inside.models.dao.InsideManager;
-import com.inside.models.entities.EventInside;
+import com.inside.models.entities.Event;
 import com.inside.persistence.JsonManager;
 
 /**
@@ -23,7 +23,7 @@ import com.inside.persistence.JsonManager;
 public class EventsController {
 
 	@RequestMapping(value = "/createEventInside", method = RequestMethod.POST)
-	public String createEvent(@Valid @RequestBody EventInside event) {
+	public String createEvent(@Valid @RequestBody Event event) {
 		//			address.insertIntoDataBase();owToBuy.insertIntoDataBase();
 //			EventInside event = eventDTO.generateEvent();
 //			event.setAddress(address);
@@ -57,7 +57,7 @@ public class EventsController {
 
 	@RequestMapping(value = "/searchEvent", method = RequestMethod.GET)
 	public String searchEvent(@RequestParam(value = "idEvent", defaultValue = "") String idEvent) {
-		EventInside ev = InsideManager.getInstance().searchEvent(idEvent);
+		Event ev = InsideManager.getInstance().searchEvent(idEvent);
 		return JsonManager.printJson(ev);
 	}
 }
