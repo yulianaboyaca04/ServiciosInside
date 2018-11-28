@@ -1,6 +1,5 @@
 package com.inside.aplication.controllers;
 
-import java.sql.Date;
 import java.sql.SQLException;
 
 import javax.validation.Valid;
@@ -12,12 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inside.exceptions.UserAlreadyExists;
-import com.inside.models.dao.InsideManager;
 import com.inside.models.dao.UsersManager;
 import com.inside.models.dto.UserDTO;
-import com.inside.models.entities.Credentials;
-import com.inside.models.entities.EventInside;
-import com.inside.models.entities.Image;
 import com.inside.models.entities.User;
 import com.inside.models.entities.UserInside;
 import com.inside.persistence.JsonManager;

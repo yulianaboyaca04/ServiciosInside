@@ -31,6 +31,7 @@ public class EventInside {
 	@JsonProperty("regulations")
 	private ArrayList<Rule> regulations;
 
+	//-------------------------------Constructors---------------------------------------------------------------------
 	public EventInside() {
 
 	}
@@ -59,94 +60,7 @@ public class EventInside {
 		}
 	}
 
-	public String getIdEvent() {
-		return idEvent;
-	}
-
-	public void setIdEvent(String idEvent) {
-		this.idEvent = idEvent;
-	}
-
-	public UserInside getUserCreator() {
-		return userCreator;
-	}
-
-	public void setUserCreator(UserInside userCreator) {
-		this.userCreator = userCreator;
-	}
-
-	public HowToBuy getHowToBuy() {
-		return howToBuy;
-	}
-
-	public void setHowToBuy(HowToBuy howToBuy) {
-		this.howToBuy = howToBuy;
-	}
-
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
-	public EventDate getEventDate() {
-		return eventDate;
-	}
-
-	public void setEventDate(EventDate eventDate) {
-		this.eventDate = eventDate;
-	}
-
-	public String getNameEvent() {
-		return nameEvent;
-	}
-
-	public void setNameEvent(String nameEvent) {
-		this.nameEvent = nameEvent;
-	}
-
-	public String getDescriptionEvent() {
-		return descriptionEvent;
-	}
-
-	public void setDescriptionEvent(String descriptionEvent) {
-		this.descriptionEvent = descriptionEvent;
-	}
-
-	public ArrayList<Image> getGallery() {
-		return gallery;
-	}
-
-	public void setGallery(ArrayList<Image> gallery) {
-		this.gallery = gallery;
-	}
-
-	public ArrayList<Interest> getEventInterests() {
-		return eventInterests;
-	}
-
-	public void setEventInterests(ArrayList<Interest> eventInterests) {
-		this.eventInterests = eventInterests;
-	}
-
-	public ArrayList<Rule> getRegulations() {
-		return regulations;
-	}
-
-	public void setRegulations(ArrayList<Rule> regulations) {
-		this.regulations = regulations;
-	}
-
-	@Override
-	public String toString() {
-		return "EventInside [idEvent=" + idEvent + ", userCreator=" + userCreator + ", howToBuy=" + howToBuy
-				+ ", address=" + address + ", eventDate=" + eventDate + ", nameEvent=" + nameEvent
-				+ ", descriptionEvent=" + descriptionEvent + ", gallery=" + gallery + ", eventInterests="
-				+ eventInterests + ", regulations=" + regulations + "]";
-	}
-
+	//-------------------------------inserts en bd--------------------------------------------------------------------
 	public void insertIntoDataBase() throws SQLException {
 		insertEventIntoDatabaseBasic();
 		for (int i = 0; i < gallery.size(); i++) {
@@ -197,6 +111,7 @@ public class EventInside {
 		preparedStatement.execute();
 	}
 
+	//----------------------------------querys en bd------------------------------------------------------------------
 	public static ArrayList<EventInside> listAllEvents() throws SQLException {
 		ArrayList<EventInside> events = new ArrayList<>();
 		ArrayList<String> idEvents = new ArrayList<>();
@@ -289,5 +204,94 @@ public class EventInside {
 		}
 
 		return regulation;
+	}
+
+	//---------------------------Getters & Setters----------------------------------------
+	public String getIdEvent() {
+		return idEvent;
+	}
+
+	public void setIdEvent(String idEvent) {
+		this.idEvent = idEvent;
+	}
+
+	public UserInside getUserCreator() {
+		return userCreator;
+	}
+
+	public void setUserCreator(UserInside userCreator) {
+		this.userCreator = userCreator;
+	}
+
+	public HowToBuy getHowToBuy() {
+		return howToBuy;
+	}
+
+	public void setHowToBuy(HowToBuy howToBuy) {
+		this.howToBuy = howToBuy;
+	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public EventDate getEventDate() {
+		return eventDate;
+	}
+
+	public void setEventDate(EventDate eventDate) {
+		this.eventDate = eventDate;
+	}
+
+	public String getNameEvent() {
+		return nameEvent;
+	}
+
+	public void setNameEvent(String nameEvent) {
+		this.nameEvent = nameEvent;
+	}
+
+	public String getDescriptionEvent() {
+		return descriptionEvent;
+	}
+
+	public void setDescriptionEvent(String descriptionEvent) {
+		this.descriptionEvent = descriptionEvent;
+	}
+
+	public ArrayList<Image> getGallery() {
+		return gallery;
+	}
+
+	public void setGallery(ArrayList<Image> gallery) {
+		this.gallery = gallery;
+	}
+
+	public ArrayList<Interest> getEventInterests() {
+		return eventInterests;
+	}
+
+	public void setEventInterests(ArrayList<Interest> eventInterests) {
+		this.eventInterests = eventInterests;
+	}
+
+	public ArrayList<Rule> getRegulations() {
+		return regulations;
+	}
+
+	public void setRegulations(ArrayList<Rule> regulations) {
+		this.regulations = regulations;
+	}
+
+	@Override
+	public String toString() {
+		return "EventInside [idEvent=" + idEvent + ", userCreator=" + userCreator + ", howToBuy=" + howToBuy
+				+ ", address=" + address + ", eventDate=" + eventDate + ", nameEvent=" + nameEvent
+				+ ", descriptionEvent=" + descriptionEvent + ", gallery=" + gallery + ", eventInterests="
+				+ eventInterests + ", regulations=" + regulations + "]";
 	}
 }
