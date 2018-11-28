@@ -93,8 +93,19 @@ public class InsideManager {
 
 	}
 
-	public void searchUser() {
-
+	/**
+	 * Busca usuario por id en la base de datos
+	 * @param idUser
+	 * @return User
+	 */
+	public User searchUser(String idUser) {
+		User user = null;
+		try {
+			user = User.searchUserIntoDatabase(idUser);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
 	}
 
 	public void deactivateUser() {
@@ -122,19 +133,6 @@ public class InsideManager {
 			ArrayList<Rule> regulations) {
 		Event eventInside = new Event(idEvent, userCreator, howToBuy, address, eventDate, nameEvent, descriptionEvent, gallery, eventInterests, regulations);
 		return eventInside;
-	}
-	
-	/**
-	 * Registra el evento en la base de datos
-	 * @param eventInside
-	 */
-	public void registerEvent(Event eventInside) {
-		try {
-			eventInside.insertIntoDataBase();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void editEvent() {
@@ -188,6 +186,11 @@ public class InsideManager {
 
 
 	public ArrayList<User> getUsers() {
+		try {
+			users = User.listAllUsers();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return users;
 	}
 

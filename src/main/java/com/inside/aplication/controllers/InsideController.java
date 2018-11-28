@@ -22,30 +22,7 @@ import com.inside.persistence.JsonManager;
 @RestController
 public class InsideController {
 
-//	/**
-//	 * 
-//	 */
-//	@RequestMapping(value = "/registerUser", method = RequestMethod.POST)
-//	public String registerUser() {
-//		return "//TODO";
-//	}
-//
-	/**
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
-	public String createUser(@Valid @RequestBody User userInside) {
-		try {
-			userInside.getCredential().insertIntoDataBase();
-			userInside.getImage().insertIntoDataBase();
-			userInside.insertIntoDataBase();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return JsonManager.printJson(userInside);
-	}
+
 //
 //	/**
 //	 * 
@@ -129,7 +106,7 @@ public class InsideController {
 
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
 	public String getUsers() {
-		return "//TODO";
+		return JsonManager.printJson(InsideManager.getInstance().getUsers());
 	}
 
 	@RequestMapping(value = "/getSuscriptions", method = RequestMethod.GET)

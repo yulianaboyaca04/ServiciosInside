@@ -176,4 +176,23 @@ public class User {
 		}
 		return interests;
 	}
+
+	/**
+	 * Lista todo los usuarios de la base de datos
+	 * @return
+	 * @throws SQLException
+	 */
+	public static ArrayList<User> listAllUsers() throws SQLException {
+		ArrayList<User> users = new ArrayList<>();
+		ArrayList<String> idUsers = new ArrayList<>();
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM USERS");
+		while (resultSet.next()) {
+			idUsers.add(resultSet.getString(1));
+		}
+		for (String idEvent : idUsers) {
+			User user = searchUserIntoDatabase(idEvent);
+			users.add(user);
+		}
+		return users;
+	}
 }

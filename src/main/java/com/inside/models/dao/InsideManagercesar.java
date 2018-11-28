@@ -123,19 +123,6 @@ public class InsideManagercesar {
 		Event eventInside = new Event(idEvent, userCreator, howToBuy, address, eventDate, nameEvent, descriptionEvent, gallery, eventInterests, regulations);
 		return eventInside;
 	}
-	
-	/**
-	 * Registra el evento en la base de datos
-	 * @param eventInside
-	 */
-	public void registerEvent(Event eventInside) {
-		try {
-			eventInside.insertIntoDataBase();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	public void editEvent() {
 		// TODO

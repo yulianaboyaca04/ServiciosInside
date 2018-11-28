@@ -4,10 +4,15 @@ import java.sql.SQLException;
 
 import javax.validation.Valid;
 
+import org.apache.catalina.mbeans.UserMBean;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.inside.models.dao.InsideManager;
+import com.inside.models.entities.Event;
 import com.inside.models.entities.User;
 import com.inside.persistence.JsonManager;
 /**
@@ -19,8 +24,22 @@ import com.inside.persistence.JsonManager;
 public class UsersController {
 
 
-
-
+	/**
+	 * Registra el usuario en la base de datos
+	 * @return
+	 */
+	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
+	public String createUser(@Valid @RequestBody User userInside) {
+		try {
+			userInside.getCredential().insertIntoDataBase();
+			userInside.getImage().insertIntoDataBase();
+			userInside.insertIntoDataBase();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return JsonManager.printJson(userInside);
+	}
+	
 	/**
 	 * 
 	 */
@@ -38,10 +57,15 @@ public class UsersController {
 
 	}
 
+	/**
+	 * Servicio para buscar un determinado usuario por su id
+	 * @param idUser
+	 * @return
+	 */
 	@RequestMapping(value = "/searchUser", method = RequestMethod.GET)
-	public String searchUser() {
-		return "//TODO";
-
+	public String searchUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
+		User user = InsideManager.getInstance().searchUser(idUser);
+		return JsonManager.printJson(user);
 	}
 
 	@RequestMapping(value = "/deactivateUser", method = RequestMethod.POST)
