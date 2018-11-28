@@ -3,8 +3,12 @@ package com.inside.aplication.controllers;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.inside.models.dao.EventsManager;
+import com.inside.models.dao.InsideManager;
 import com.inside.models.entities.EventInside;
 import com.inside.models.entities.UserInside;
+import com.inside.persistence.JsonManager;
 
 /**
  * 
@@ -13,6 +17,12 @@ import com.inside.models.entities.UserInside;
  */
 @RestController
 public class InsideController {
+	
+	@RequestMapping(value = "/getListAllEvents", method = RequestMethod.GET)
+	public String searchUser() {	
+		return JsonManager.printJson(InsideManager.getInstance().getEvents());
+
+	}
 
 //	/**
 //	 * 
