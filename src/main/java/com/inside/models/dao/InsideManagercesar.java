@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
 
+import com.inside.exceptions.EventDoesntExists;
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
@@ -128,19 +129,18 @@ public class InsideManagercesar {
 		// TODO
 	}
 
-	public void deleteEvent() {
-
+	public void deleteEvent(String idEvent) throws EventDoesntExists, SQLException {
+		Event ev = searchEvent(idEvent);
+		ev.removeFromDatabase();
 	}
 
-	public Event searchEvent(String idEvent) {
-		Event event = null;
-		try {
-			event = Event.searchEventIntoDatabase(idEvent);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public Event searchEvent(String idEvent) throws EventDoesntExists {
+		for (Event event : events) {
+			if (event.getIdEvent().equals(idEvent)) {
+				return event;
+			}
 		}
-		return event;
+		throw new EventDoesntExists();
 	}
 
 	//------------------------------------------------------------------------------

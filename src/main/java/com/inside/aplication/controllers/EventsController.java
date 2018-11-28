@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.inside.exceptions.EventDoesntExists;
 import com.inside.models.dao.InsideManager;
+import com.inside.models.dao.InsideManagercesar;
 import com.inside.models.entities.Event;
 import com.inside.persistence.JsonManager;
 
@@ -49,10 +51,14 @@ public class EventsController {
 		return "//TODO";
 	}
 
-	@RequestMapping(value = "/deleteEvent", method = RequestMethod.POST)
-	public String deleteEvent() {
-		return "//TODO";
-
+	@RequestMapping(value = "/deleteEvent", method = RequestMethod.GET)
+	public String deleteEvent(@RequestParam(value = "idEvent", defaultValue = "") String idEvent) {
+		try {
+			InsideManagercesar.getInstance().deleteEvent(idEvent);
+		} catch (EventDoesntExists | SQLException e) {
+			return e.getMessage();
+		}
+		return "Event deleted";
 	}
 
 	@RequestMapping(value = "/searchEvent", method = RequestMethod.GET)
