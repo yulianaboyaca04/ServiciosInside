@@ -52,8 +52,10 @@ public class UsersController {
 	 * 
 	 */
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	public String deleteUser() {
-		return "//TODO";
+	public String deleteUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
+		User user = InsideManager.getInstance().searchUser(idUser);
+		
+		return "successfully deleted user";
 
 	}
 
