@@ -16,5 +16,16 @@ public class PruebaPersistenciaCesar {
 		
 //		System.out.println();
 //		System.out.println(JsonManager.printJson(InsideManager.getInstance().listAllEvents()));
+	
+/*
+ 		metodos listos:
+ 		
+ 		mostrar todos los eventos creados:: InsideManager.getInstance().listAllEvents()
+ 		
+ 	
+ 	
+ 	
+ */
+	
 	}
 }

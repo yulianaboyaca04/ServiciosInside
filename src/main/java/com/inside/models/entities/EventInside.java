@@ -122,8 +122,6 @@ public class EventInside {
 		for (String idEvent : idEvents) {
 			EventInside event = searchEventIntoDatabase(idEvent);
 			events.add(event);
-			System.out.println(events.get(events.size() - 1));
-
 		}
 		return events;
 	}
