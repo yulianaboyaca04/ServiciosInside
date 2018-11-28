@@ -204,6 +204,23 @@ public class Event {
 		return regulation;
 	}
 
+	//-----------------------------------Remove en bd------------------------------------------------------------------
+	
+	public void removeFromDatabase() throws SQLException {
+		System.out.println("Deleting event...");
+        PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM HOW_TO_BUY WHERE ID_HOW_TO_BUY='" + this.howToBuy.getIdHowToBuy() + "'");
+        preparedStatement.execute();
+        preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM ADDRESS WHERE ID_ADDRESS='" + this.address.getIdAddress() + "'");
+        preparedStatement.execute();
+        preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM DATES WHERE ID_DATE='" + this.eventDate.getIdDate() + "'");
+        preparedStatement.execute();
+        preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM EVENTS WHERE ID_EVENT='" + this.idEvent + "'");
+        preparedStatement.execute();
+        System.out.println("Event deleted.");
+	}
+
+
+	
 	//---------------------------Getters & Setters----------------------------------------
 	public String getIdEvent() {
 		return idEvent;
