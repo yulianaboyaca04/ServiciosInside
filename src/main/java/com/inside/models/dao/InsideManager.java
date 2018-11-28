@@ -3,7 +3,9 @@ package com.inside.models.dao;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 
+import com.inside.exceptions.UserDoesntExists;
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
@@ -16,6 +18,7 @@ import com.inside.models.entities.Rule;
 import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
+import com.inside.persistence.DataBaseAcces;
 
 
 public class InsideManager {
@@ -184,7 +187,7 @@ public class InsideManager {
 		return events;
 	}
 
-
+	
 	public ArrayList<User> getUsers() {
 		try {
 			users = User.listAllUsers();
@@ -207,6 +210,26 @@ public class InsideManager {
 
 	public ArrayList<ViewsHistory> getViewsHistory() {
 		return viewsHistory;
+	}
+
+	/**
+	 * Busca el usuario con el id indicado dentro del array de Users
+	 * @param idUser
+	 * @return User
+	 * @throws UserDoesntExists
+	 */
+	public User SearchUser(String idUser) throws UserDoesntExists {
+		for (User userInside : users) {
+			if (userInside.getIdUser().equals(idUser)) {
+				return userInside;
+			}
+		}
+		throw new UserDoesntExists();
+	}
+
+	public void deleteUser(String idUser) throws SQLException {
+		User user = searchUser(idUser);
+		user.removeFromDatabase();
 	}
 
 

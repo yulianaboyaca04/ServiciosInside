@@ -195,4 +195,10 @@ public class User {
 		}
 		return users;
 	}
+
+	public void removeFromDatabase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM USERS WHERE USERS.ID_USER = "  + this.idUser);
+		preparedStatement.execute();
+	}
 }

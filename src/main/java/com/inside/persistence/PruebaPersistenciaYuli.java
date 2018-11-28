@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.sql.Date;
 import java.sql.SQLException;
 
+import com.inside.aplication.controllers.UsersController;
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
@@ -48,13 +49,15 @@ public class PruebaPersistenciaYuli {
  */
 	
 	public static void main(String[] args) {
-		PruebaPersistenciaYuli py =  new PruebaPersistenciaYuli();
-		py.testSearchPersistence();
+		//PruebaPersistenciaYuli py =  new PruebaPersistenciaYuli();
+		//py.testSearchPersistence();
+		UsersController us =  new UsersController();
+		us.deleteUser("2");
 	}
 	
 	private void testSearchPersistence() {
 		try {
-			User userInside = User.searchUserIntoDatabase("42");
+			User userInside = User.searchUserIntoDatabase("2");
 			System.out.println(JsonManager.printJson(userInside));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

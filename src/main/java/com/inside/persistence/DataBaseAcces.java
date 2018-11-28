@@ -14,7 +14,6 @@ public class DataBaseAcces {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager
 					.getConnection("jdbc:mysql://myinsidebd.cnluui5kegb8.us-east-1.rds.amazonaws.com/inside?" + "user=insideroot55&password=c96y99n94f97&serverTimezone=UTC");
-
 			statement = connection.createStatement();
 		} catch (ClassNotFoundException | SQLException ex) {
 			ex.printStackTrace();

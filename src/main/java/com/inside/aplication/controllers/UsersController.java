@@ -1,5 +1,6 @@
 package com.inside.aplication.controllers;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import javax.validation.Valid;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inside.models.dao.InsideManager;
 import com.inside.models.entities.Event;
 import com.inside.models.entities.User;
+import com.inside.persistence.DataBaseAcces;
 import com.inside.persistence.JsonManager;
 /**
  * 
@@ -44,19 +46,21 @@ public class UsersController {
 	 * 
 	 */
 	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public String editUser() {
+	public String editUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
 		return "//TODO";
 	}
 
 	/**
-	 * 
+	 * Elimina el usuario de la base de datos y de la logica
 	 */
-	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
 	public String deleteUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
-		User user = InsideManager.getInstance().searchUser(idUser);
-		
-		return "successfully deleted user";
-
+		try {
+			InsideManager.getInstance().deleteUser(idUser);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return "Successfully deleted user";
 	}
 
 	/**
