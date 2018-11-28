@@ -41,7 +41,11 @@ public class InsideManager {
 	//----------------------------------------------------------------------------------------
 
 	private InsideManager () {
-		events = new ArrayList<>();
+		try {
+			events = EventInside.listAllEvents();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		users = new ArrayList<>();
 		suscriptions = new ArrayList<>();
 		attendanceHistory = new ArrayList<>();
