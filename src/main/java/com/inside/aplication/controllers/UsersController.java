@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inside.exceptions.UserAlreadyExists;
 import com.inside.models.dao.InsideManager;
 import com.inside.models.dao.UsersManager;
-import com.inside.models.dto.EventDTO;
 import com.inside.models.dto.UserDTO;
 import com.inside.models.entities.Credentials;
 import com.inside.models.entities.EventInside;
