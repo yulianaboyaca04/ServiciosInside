@@ -38,6 +38,14 @@ public class PruebaPersistenciaYuli {
 	public UserInside uI;
 	public ViewsHistory vh;
 	
+/*
+ * ---------------METODOS LISTOS-------------------------
+ * 
+ * 1. servicio de mostrar todos los eventos creados:: /getListAllEvents
+ * 
+ * 
+ * 
+ */
 	
 	public static void main(String[] args) {
 		PruebaPersistenciaYuli py =  new PruebaPersistenciaYuli();

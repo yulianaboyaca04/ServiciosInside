@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.inside.models.dao.EventsManager;
 import com.inside.models.dao.InsideManager;
 import com.inside.models.entities.EventInside;
 import com.inside.models.entities.UserInside;
