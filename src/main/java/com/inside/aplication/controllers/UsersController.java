@@ -19,22 +19,7 @@ import com.inside.persistence.JsonManager;
 public class UsersController {
 
 
-	/**
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
-	public String createUser(@Valid @RequestBody User userInside) {
-		User user = null;
-			try {
-				//user.getCredential().insertIntoDataBase();
-				user.getImage().insertIntoDataBase();
-				user.insertIntoDataBase();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		return JsonManager.printJson(user);
-	}
+
 
 	/**
 	 * 

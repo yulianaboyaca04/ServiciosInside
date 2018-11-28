@@ -1,5 +1,10 @@
 package com.inside.aplication.controllers;
 
+import java.sql.SQLException;
+
+import javax.validation.Valid;
+
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +21,6 @@ import com.inside.persistence.JsonManager;
  */
 @RestController
 public class InsideController {
-	
-	@RequestMapping(value = "/getListAllEvents", method = RequestMethod.GET)
-	public String searchUser() {	
-		return JsonManager.printJson(InsideManager.getInstance().getEvents());
-
-	}
 
 //	/**
 //	 * 
@@ -31,14 +30,22 @@ public class InsideController {
 //		return "//TODO";
 //	}
 //
-//	/**
-//	 * 
-//	 * @return
-//	 */
-//	@RequestMapping(value = "/createUser", method = RequestMethod.POST)
-//	public String createUser() {
-//		return "//TODO";
-//	}
+	/**
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
+	public String createUser(@Valid @RequestBody User userInside) {
+		try {
+			userInside.getCredential().insertIntoDataBase();
+			userInside.getImage().insertIntoDataBase();
+			userInside.insertIntoDataBase();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return JsonManager.printJson(userInside);
+	}
 //
 //	/**
 //	 * 
@@ -117,7 +124,7 @@ public class InsideController {
 
 	@RequestMapping(value = "/getEvents", method = RequestMethod.GET)
 	public String getEvents() {
-		return "//TODO";
+		return JsonManager.printJson(InsideManager.getInstance().getEvents());
 	}
 
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
