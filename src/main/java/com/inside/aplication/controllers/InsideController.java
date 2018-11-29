@@ -38,9 +38,14 @@ public class InsideController {
 	}
 
 	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
-	public String editUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
-		// TODO
-		return "//TODO";
+	public String editUser(@Valid @RequestBody User userEdited) {
+		try {
+			InsideManager.getInstance().editUser(userEdited);
+		} catch (UserDoesntExists | SQLException e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+		return "User edited";
 	}
 
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
@@ -48,6 +53,7 @@ public class InsideController {
 		try {
 			InsideManager.getInstance().deleteUser(idUser);
 		} catch (SQLException | UserDoesntExists e) {
+			e.printStackTrace();
 			return e.getMessage();
 		}
 		return "User deleted";

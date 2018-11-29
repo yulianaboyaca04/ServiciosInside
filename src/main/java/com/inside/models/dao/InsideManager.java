@@ -36,12 +36,16 @@ public class InsideManager {
 
 	private InsideManager() {
 		try {
+			System.out.println("Loading events...");
 			events = Event.listAllEvents();
+			System.out.println("Events loaded.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		try {
+			System.out.println("Loading users...");
 			users = User.listAllUsers();
+			System.out.println("Users loaded.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -57,8 +61,9 @@ public class InsideManager {
 		userInside.insertIntoDataBase();
 	}
 
-	public void editUser() {
-		// TODO
+	public void editUser(User userEdited) throws UserDoesntExists, SQLException {
+		User us = searchUser(userEdited.getIdUser());
+		us.edit(userEdited);
 	}
 
 	public void deleteUser(String idUser) throws SQLException, UserDoesntExists {

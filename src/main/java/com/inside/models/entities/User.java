@@ -200,7 +200,7 @@ public class User {
 
 	public void removeFromDatabase() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
-				.prepareStatement("DELETE FROM CREDENTIALS WHERE ID_CREDENTIALS=" + this.credential.getIdCredential());
+				.prepareStatement("DELETE FROM CREDENTIALS WHERE ID_CREDENTIAL=" + this.credential.getIdCredential());
 		preparedStatement.execute();
 		preparedStatement = DataBaseAcces.getInstance().getConnection()
 				.prepareStatement("DELETE FROM IMAGES WHERE ID_IMAGE=" + this.image.getIdImage());
@@ -209,5 +209,49 @@ public class User {
 				.prepareStatement("DELETE FROM USERS WHERE USERS.ID_USER = " + this.idUser);
 		preparedStatement.execute();
 		
+	}
+
+	public void edit(User userEdited) throws SQLException {
+		PreparedStatement preparedStatement;
+		if(!this.credential.equals(userEdited.getCredential())){
+			this.credential = userEdited.getCredential();
+			//Actualiza la tabla CREDENTIALS
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"UPDATE CREDENTIALS SET "
+					+ "USER_NAME='" + this.credential.getUserName() + "', " 
+					+ "PASSWORD_OR_TOKEN='"+ this.credential.getPasswordOrToken() + "' " 
+					+ "WHERE ID_CREDENTIAL='" + this.credential.getIdCredential() + "'");
+			preparedStatement.executeUpdate();	
+		}
+		if(!this.image.equals(userEdited.getImage())){
+			this.image = userEdited.getImage();
+			//Actualiza la tabla IMAGES
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"UPDATE IMAGES SET "
+					+ "CONTENT='"+ this.image.getContent() + "' " 
+					+ "WHERE ID_IMAGE='" + this.image.getIdImage() + "'");
+			preparedStatement.executeUpdate();
+		}
+		
+		if((!this.nameUser.equals(userEdited.getNameUser()))||(!this.lastName.equals(userEdited.getLastName()))||(!this.birthDate.equals(userEdited.getBirthDate()))||(!this.nickname.equals(userEdited.getNickname()))){
+			this.nameUser = userEdited.getNameUser();
+			this.lastName = userEdited.getLastName();
+			/*this.birthDate = userEdited.getBirthDate();*/ //TODO
+			this.nickname = userEdited.getNickname();
+			//Actualiza la tabla USERS
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"UPDATE USERS SET "
+					+ "NAME_USER='" + this.nameUser + "', " 
+					+ "LAST_NAME='" + this.lastName + "', " 
+					/*+ "BIRTH_DATE='" + this.birthDate + "', "*/ 
+					+ "NICKNAME='" + this.nickname + "' " 
+					+ "WHERE ID_USER='" + this.idUser + "'");
+			preparedStatement.executeUpdate();	
+		}
+		if(!this.userInteres.equals(userEdited.getUserInteres())){
+			this.userInteres = userEdited.getUserInteres();
+			//TODO
+			
+		}
 	}
 }
