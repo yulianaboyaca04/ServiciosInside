@@ -3,6 +3,8 @@ package com.inside.models.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
 import com.inside.persistence.DataBaseAcces;
 
 public class Interest {
@@ -48,8 +50,10 @@ public class Interest {
 		preparedStatement.execute();
 	}
 
-	public static Interest searchUserIntoDatabase(String codigo, ResultSet resultSet2) throws SQLException {
-		resultSet2.close();
+	public static Interest searchInterestIntoDatabase(String codigo, ResultSet resultSet2) throws SQLException {
+		if (resultSet2 != null) {
+			resultSet2.close();
+		}
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM INTERESTS WHERE ID_INTEREST='" + codigo + "'");
 		Interest interestUser = new Interest();
@@ -59,5 +63,19 @@ public class Interest {
 			break;
 		}
 		return interestUser;
+	}
+
+	public static ArrayList<Interest> listAllInterests() throws SQLException {
+		ArrayList<Interest> interests = new ArrayList<>();
+		ArrayList<String> idInterest = new ArrayList<>();
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM INTERESTS");
+		while (resultSet.next()) {
+			idInterest.add(resultSet.getString(1));
+		}
+		for (String id : idInterest) {
+			Interest interest = searchInterestIntoDatabase(id, null);
+			interests.add(interest);
+		}
+		return interests;
 	}
 }

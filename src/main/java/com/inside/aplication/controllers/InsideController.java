@@ -25,6 +25,7 @@ import com.inside.persistence.JsonManager;
 @RestController
 public class InsideController {
 
+	// ---------------------------------user-------------------------
 	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
 	public String createUser(@Valid @RequestBody User userInside) {
 		try {
@@ -42,7 +43,6 @@ public class InsideController {
 		try {
 			InsideManager.getInstance().editUser(userEdited);
 		} catch (UserDoesntExists | SQLException e) {
-			e.printStackTrace();
 			return e.getMessage();
 		}
 		return "User edited";
@@ -53,7 +53,6 @@ public class InsideController {
 		try {
 			InsideManager.getInstance().deleteUser(idUser);
 		} catch (SQLException | UserDoesntExists e) {
-			e.printStackTrace();
 			return e.getMessage();
 		}
 		return "User deleted";
@@ -126,34 +125,50 @@ public class InsideController {
 			@RequestParam(value = "longitude", defaultValue = "") String longitude) {
 		return JsonManager.printJson(InsideManager.getInstance().getEventsByNearnes(Float.parseFloat(latittude),
 				Float.parseFloat(longitude)));
-
 	}
 
 	// ------------------------------------------------------------------------------
 
-	@RequestMapping(value = "/subscribeToEvent", method = RequestMethod.POST)
-	public String subscribeToEvent(User user, Event event) {
-		// TODO
-		return "//TODO";
+	@RequestMapping(value = "/subscribeToEvent", method = RequestMethod.GET)
+	public String subscribeToEvent(@RequestParam(value = "idUser", defaultValue = "") String idUser, 
+			@RequestParam(value = "idEvent", defaultValue = "") String idEvent) {
+		try {
+			InsideManager.getInstance().subscribeToEvent(idUser, idEvent);
+		} catch (SQLException | UserDoesntExists | EventDoesntExists e) {
+			return e.getMessage();
+		}
+		return "Suscription created";
 
 	}
 
-	@RequestMapping(value = "/registerAttendanceToEvent", method = RequestMethod.POST)
-	public String registerAttendanceToEvent(User user, Event event) {
-		// TODO
-		return "//TODO";
-
+	@RequestMapping(value = "/registerAttendanceToEvent", method = RequestMethod.GET)
+	public String registerAttendanceToEvent(@RequestParam(value = "idUser", defaultValue = "") String idUser, 
+			@RequestParam(value = "idEvent", defaultValue = "") String idEvent) {
+		try {
+			InsideManager.getInstance().registerAttendanceToEvent(idUser, idEvent);
+		} catch (SQLException | UserDoesntExists | EventDoesntExists e) {
+			return e.getMessage();
+		}
+		return "Attendance noted";
 	}
 
-	@RequestMapping(value = "/registerViewToEvent", method = RequestMethod.POST)
-	public String registerViewToEvent(User user, Event event) {
-		// TODO
-		return "//TODO";
-
+	@RequestMapping(value = "/registerViewToEvent", method = RequestMethod.GET)
+	public String registerViewToEvent(@RequestParam(value = "idUser", defaultValue = "") String idUser, 
+			@RequestParam(value = "idEvent", defaultValue = "") String idEvent) {
+		try {
+			InsideManager.getInstance().registerViewToEvent(idUser, idEvent);
+		} catch (SQLException | UserDoesntExists | EventDoesntExists e) {
+			return e.getMessage();
+		}
+		return "View noted";
 	}
 
 	// ----------------------------------getters&setters---------------------------------
-
+	@RequestMapping(value = "/getInterests", method = RequestMethod.GET)
+	public String getInterests() {
+		return JsonManager.printJson(InsideManager.getInstance().getInterests());
+	}
+	
 	@RequestMapping(value = "/getEvents", method = RequestMethod.GET)
 	public String getEvents() {
 		return JsonManager.printJson(InsideManager.getInstance().getEvents());
@@ -177,6 +192,5 @@ public class InsideController {
 	@RequestMapping(value = "/getViewsHistory", method = RequestMethod.GET)
 	public String getViewsHistory() {
 		return JsonManager.printJson(InsideManager.getInstance().getViewsHistory());
-
 	}
 }

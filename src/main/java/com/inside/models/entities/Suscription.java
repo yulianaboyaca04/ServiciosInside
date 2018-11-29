@@ -1,28 +1,27 @@
 package com.inside.models.entities;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
+import com.inside.exceptions.EventDoesntExists;
+import com.inside.exceptions.UserDoesntExists;
+import com.inside.models.dao.InsideManager;
 import com.inside.persistence.DataBaseAcces;
 
 public class Suscription {
 
-	private String idSusciption;
 	private User user;
 	private Event event;
 	
-	public Suscription(String idSusciption, User user, Event event) {
-		this.idSusciption = idSusciption;
+	public Suscription(User user, Event event) {
 		this.user = user;
 		this.event = event;
 	}
 
-	public String getIdSusciption() {
-		return idSusciption;
-	}
-
-	public void setIdSusciption(String idSusciption) {
-		this.idSusciption = idSusciption;
+	public Suscription() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public User getUser() {
@@ -43,14 +42,13 @@ public class Suscription {
 
 	@Override
 	public String toString() {
-		return "Suscription [idSusciption=" + idSusciption + ", user=" + user + ", event=" + event + "]";
+		return "Suscription [user=" + user + ", event=" + event + "]";
 	}
 
 	public void insertIntoDataBase() throws SQLException {
-		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO SUSCRIPTION VALUES(?,?,?)");
-		preparedStatement.setString(1, this.idSusciption);
-		preparedStatement.setString(2, this.user.getIdUser());
-		preparedStatement.setString(3, this.event.getIdEvent());
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO SUSCRIPTION VALUES(?,?)");
+		preparedStatement.setString(1, this.user.getIdUser());
+		preparedStatement.setString(2, this.event.getIdEvent());
 		preparedStatement.execute();
 	}
 }

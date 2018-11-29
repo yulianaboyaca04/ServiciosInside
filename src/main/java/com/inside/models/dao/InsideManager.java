@@ -1,5 +1,6 @@
 package com.inside.models.dao;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +13,8 @@ import com.inside.models.entities.Interest;
 import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
+import com.inside.persistence.DataBaseAcces;
+import com.inside.persistence.JsonManager;
 
 public class InsideManager {
 
@@ -23,7 +26,6 @@ public class InsideManager {
 	private ArrayList<Interest> interests;
 
 	// --------------------------------Singleton----------------------------------------------
-
 	private static InsideManager insideManger;
 
 	public static InsideManager getInstance() {
@@ -49,10 +51,24 @@ public class InsideManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		suscriptions = new ArrayList<>();
+		try {
+			System.out.println("Loading interests...");
+			interests = Interest.listAllInterests();
+			System.out.println("Interests loaded.");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			System.out.println("Loading suscriptions...");
+			listAllSuscriptions();
+			System.out.println("Suscriptions loaded.");
+		} catch (SQLException | UserDoesntExists | EventDoesntExists e) {
+			e.printStackTrace();
+		}
+
 		attendanceHistory = new ArrayList<>();
 		viewsHistory = new ArrayList<>();
-		interests = new ArrayList<>();
+
 	}
 
 	// -----------------------------------user------------------------------------------------
@@ -118,16 +134,31 @@ public class InsideManager {
 
 	// ------------------------------------rompimientos--------------------------------------
 
-	public void subscribeToEvent(User user, Event event) {
-
+	public void subscribeToEvent(String idUser, String idEvent)
+			throws SQLException, UserDoesntExists, EventDoesntExists {
+		User user = searchUser(idUser);
+		Event event = searchEvent(idEvent);
+		Suscription suscription = new Suscription(user, event);
+		suscription.insertIntoDataBase();
+		this.suscriptions.add(suscription);
 	}
 
-	public void registerAttendanceToEvent(User user, Event event) {
-
+	public void registerAttendanceToEvent(String idUser, String idEvent)
+			throws UserDoesntExists, EventDoesntExists, SQLException {
+		User user = searchUser(idUser);
+		Event event = searchEvent(idEvent);
+		AttendanceHistory attendanceHistory = new AttendanceHistory(user, event);
+		attendanceHistory.insertIntoDataBase();
+		this.attendanceHistory.add(attendanceHistory);
 	}
 
-	public void registerViewToEvent(User user, Event event) {
-
+	public void registerViewToEvent(String idUser, String idEvent)
+			throws UserDoesntExists, EventDoesntExists, SQLException {
+		User user = searchUser(idUser);
+		Event event = searchEvent(idEvent);
+		ViewsHistory view = new ViewsHistory(user, event);
+		view.insertIntoDataBase();
+		this.viewsHistory.add(view);
 	}
 
 	// --------------------------------------intereses----------------------------------------
@@ -178,4 +209,28 @@ public class InsideManager {
 	public ArrayList<ViewsHistory> getViewsHistory() {
 		return viewsHistory;
 	}
+
+	public ArrayList<Interest> getInterests() {
+		return interests;
+	}
+
+	public void setInterests(ArrayList<Interest> interests) {
+		this.interests = interests;
+	}
+
+	// -----------------------------------------listares--------------------------------------
+
+	public void listAllSuscriptions() throws SQLException, UserDoesntExists, EventDoesntExists {
+		suscriptions = new ArrayList<>();
+		ResultSet resultSet;
+		resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM SUSCRIPTION");
+		while (resultSet.next()) {
+			User us = searchUser(resultSet.getString(1));
+			Event ev = searchEvent(resultSet.getString(2));
+			Suscription suscription = new Suscription(us, ev);
+			suscriptions.add(suscription);
+		}
+
+	}
+
 }
