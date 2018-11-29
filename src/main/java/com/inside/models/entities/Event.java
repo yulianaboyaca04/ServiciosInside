@@ -4,11 +4,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
-public class Event {
+public class Event{
 
 	@JsonProperty("idEvent")
 	private String idEvent;
@@ -291,9 +290,8 @@ public class Event {
 			//TODO
 		}
 	}
-
-	// ---------------------------Getters &
-	// Setters----------------------------------------
+	
+	// ---------------------------Getters & Setters----------------------------------------
 	public String getIdEvent() {
 		return idEvent;
 	}
@@ -381,4 +379,5 @@ public class Event {
 				+ ", descriptionEvent=" + descriptionEvent + ", gallery=" + gallery + ", eventInterests="
 				+ eventInterests + ", regulations=" + regulations + "]";
 	}
+
 }
