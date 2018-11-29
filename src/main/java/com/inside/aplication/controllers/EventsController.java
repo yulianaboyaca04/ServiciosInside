@@ -26,29 +26,27 @@ public class EventsController {
 
 	@RequestMapping(value = "/createEventInside", method = RequestMethod.POST)
 	public String createEvent(@Valid @RequestBody Event event) {
-		//			address.insertIntoDataBase();owToBuy.insertIntoDataBase();
-//			EventInside event = eventDTO.generateEvent();
-//			event.setAddress(address);
-//			event.setHowToBuy(howToBuy);
 		try {
-			event.getAddress().insertIntoDataBase();
-			event.getHowToBuy().insertIntoDataBase();
-			event.getEventDate().insertIntoDataBase();
-			event.insertIntoDataBase();
+			InsideManagercesar.getInstance().createEvent(event);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return e.getMessage();
 		}
-		return JsonManager.printJson(event);
-		
+		return "Event created";
+
 //		
 //		InsideManager.getInstance().registerEvent(event);
 //		return JsonManager.printJson(event); // TODO cambiar por un log de la creacion
 	}
 
 	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)
-	public String editEvent() {
-		return "//TODO";
+	public String editEvent(@Valid @RequestBody Event eventEdited) {
+		try {
+			InsideManagercesar.getInstance().editEvent(eventEdited);
+		} catch (EventDoesntExists | SQLException e) {
+			e.printStackTrace();
+			return e.getMessage();
+		}
+		return "Event edited";
 	}
 
 	@RequestMapping(value = "/deleteEvent", method = RequestMethod.GET)

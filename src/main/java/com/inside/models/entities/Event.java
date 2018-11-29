@@ -31,7 +31,7 @@ public class Event {
 	@JsonProperty("regulations")
 	private ArrayList<Rule> regulations;
 
-	//-------------------------------Constructors---------------------------------------------------------------------
+	// -------------------------------Constructors---------------------------------------------------------------------
 	public Event() {
 
 	}
@@ -60,7 +60,8 @@ public class Event {
 		}
 	}
 
-	//-------------------------------inserts en bd--------------------------------------------------------------------
+	// -------------------------------inserts en
+	// bd--------------------------------------------------------------------
 	public void insertIntoDataBase() throws SQLException {
 		insertEventIntoDatabaseBasic();
 		for (int i = 0; i < gallery.size(); i++) {
@@ -111,7 +112,8 @@ public class Event {
 		preparedStatement.execute();
 	}
 
-	//----------------------------------querys en bd------------------------------------------------------------------
+	// ----------------------------------querys en
+	// bd------------------------------------------------------------------
 	public static ArrayList<Event> listAllEvents() throws SQLException {
 		ArrayList<Event> events = new ArrayList<>();
 		ArrayList<String> idEvents = new ArrayList<>();
@@ -204,24 +206,94 @@ public class Event {
 		return regulation;
 	}
 
-	//-----------------------------------Remove en bd------------------------------------------------------------------
-	
+	// -----------------------------------Remove en
+	// bd------------------------------------------------------------------
+
 	public void removeFromDatabase() throws SQLException {
 		System.out.println("Deleting event...");
-        PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM HOW_TO_BUY WHERE ID_HOW_TO_BUY='" + this.howToBuy.getIdHowToBuy() + "'");
-        preparedStatement.execute();
-        preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM ADDRESS WHERE ID_ADDRESS='" + this.address.getIdAddress() + "'");
-        preparedStatement.execute();
-        preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM DATES WHERE ID_DATE='" + this.eventDate.getIdDate() + "'");
-        preparedStatement.execute();
-        preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("DELETE FROM EVENTS WHERE ID_EVENT='" + this.idEvent + "'");
-        preparedStatement.execute();
-        System.out.println("Event deleted.");
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM HOW_TO_BUY WHERE ID_HOW_TO_BUY='" + this.howToBuy.getIdHowToBuy() + "'");
+		preparedStatement.execute();
+		preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM ADDRESS WHERE ID_ADDRESS='" + this.address.getIdAddress() + "'");
+		preparedStatement.execute();
+		preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM DATES WHERE ID_DATE='" + this.eventDate.getIdDate() + "'");
+		preparedStatement.execute();
+		preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM EVENTS WHERE ID_EVENT='" + this.idEvent + "'");
+		preparedStatement.execute();
+		System.out.println("Event deleted.");
 	}
 
+	// ------------------------------------Editar en
+	// bd----------------------------------------------------------------
 
-	
-	//---------------------------Getters & Setters----------------------------------------
+	public void edit(Event eventEdited) throws SQLException {
+		PreparedStatement preparedStatement;
+		if (!this.howToBuy.equals(eventEdited.howToBuy)) {
+			this.howToBuy = eventEdited.howToBuy;
+			//Actualiza la tabla howToBuy
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"UPDATE HOW_TO_BUY SET "
+					+ "DESCRIPTION_HOW_TO_BUY='" + this.howToBuy.getDescriptionHowToBuy() + "', " 
+					+ "IN_PRESENCE='"+ (this.howToBuy.isInPresence() == true?1:0) + "', " 
+					+ "PRICE='" + this.howToBuy.getPrice() + "' " 
+
+					+ "WHERE ID_HOW_TO_BUY='" + this.howToBuy.getIdHowToBuy() + "'");
+			preparedStatement.executeUpdate();
+		}
+		if (!this.address.equals(eventEdited.address)) {
+			this.address = eventEdited.address;
+			//Actualiza la tabla address
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"UPDATE ADDRESS SET "
+					+ "LATITUDE='" + this.address.getLatitude() + "', " 
+					+ "LONGITUDE='"+ this.address.getLongitude() + "', " 
+					+ "NAME_CITY='"+ this.address.getNameCity() + "', " 
+					+ "NAME_PLACE='" + this.address.getNamePlace() + "' " 
+
+					+ "WHERE ID_ADDRESS='" + this.address.getIdAddress() + "'");
+			preparedStatement.executeUpdate();
+		}
+		if (!this.eventDate.equals(eventEdited.eventDate)) {
+			/*this.eventDate = eventEdited.eventDate;  //TODO
+			//Actualiza la tabla address
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"UPDATE DATES SET "
+					+ "DATE_START='" + this.eventDate.getDateStart() + "', " 
+					+ "DATE_FINISH='"+ this.eventDate.getDateFinish() + "'" 
+  
+					+ "WHERE ID_DATE='" + this.eventDate.getIdDate() + "'");
+			preparedStatement.executeUpdate();*/
+		}
+		if ((!this.nameEvent.equals(eventEdited.nameEvent))||(!this.descriptionEvent.equals(eventEdited.descriptionEvent))) {
+			this.nameEvent = eventEdited.nameEvent;
+			this.descriptionEvent = eventEdited.descriptionEvent;
+			//Actualiza la tabla events
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"UPDATE EVENTS SET "
+					+ "NAME_EVENT='" + this.nameEvent + "', " 
+					+ "DESCRIPTION_EVENT='"+ this.descriptionEvent + "' " 
+					+ "WHERE ID_EVENT='" + this.idEvent + "'");
+			preparedStatement.executeUpdate();
+		}
+		if (!this.gallery.equals(eventEdited.gallery)) {
+			this.gallery = eventEdited.gallery;
+			//TODO
+		}
+		if (!this.eventInterests.equals(eventEdited.eventInterests)) {
+			this.eventInterests = eventEdited.eventInterests;
+			//TODO
+		}
+		if (!this.regulations.equals(eventEdited.regulations)) {
+			this.regulations = eventEdited.regulations;
+			//TODO
+		}
+	}
+
+	// ---------------------------Getters &
+	// Setters----------------------------------------
 	public String getIdEvent() {
 		return idEvent;
 	}

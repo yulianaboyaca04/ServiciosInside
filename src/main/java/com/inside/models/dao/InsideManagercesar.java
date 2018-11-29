@@ -104,33 +104,22 @@ public class InsideManagercesar {
 
 	// ---------------------------------event-------------------------
 
-	/**
-	 * Crea un evento
-	 * @param idEvent
-	 * @param userCreator
-	 * @param howToBuy
-	 * @param address
-	 * @param eventDate
-	 * @param nameEvent
-	 * @param descriptionEvent
-	 * @param gallery
-	 * @param eventInterests
-	 * @param regulations
-	 * @return
-	 */
-	public Event createEvent(String idEvent, User userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
-			String nameEvent, String descriptionEvent, ArrayList<Image> gallery, ArrayList<Interest> eventInterests,
-			ArrayList<Rule> regulations) {
-		Event eventInside = new Event(idEvent, userCreator, howToBuy, address, eventDate, nameEvent, descriptionEvent, gallery, eventInterests, regulations);
-		return eventInside;
+	public void createEvent(Event event) throws SQLException {
+		event.getAddress().insertIntoDataBase();
+		event.getHowToBuy().insertIntoDataBase();
+		event.getEventDate().insertIntoDataBase();
+		event.insertIntoDataBase();
+		events.add(event);
 	}
 
-	public void editEvent() {
-		// TODO
+	public void editEvent(Event eventEdited) throws EventDoesntExists, SQLException {
+		Event ev = searchEvent(eventEdited.getIdEvent());
+		ev.edit(eventEdited);
 	}
 
 	public void deleteEvent(String idEvent) throws EventDoesntExists, SQLException {
 		Event ev = searchEvent(idEvent);
+		events.remove(ev);
 		ev.removeFromDatabase();
 	}
 
