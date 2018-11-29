@@ -227,8 +227,10 @@ public class InsideManager {
 		throw new UserDoesntExists();
 	}
 
+	
 	public void deleteUser(String idUser) throws SQLException {
 		User user = searchUser(idUser);
+		users.remove(user);
 		user.removeFromDatabase();
 	}
 

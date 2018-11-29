@@ -2,21 +2,20 @@ package com.inside.models.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.sql.Date;
 
 import com.inside.exceptions.EventDoesntExists;
-import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
-import com.inside.models.entities.EventDate;
 import com.inside.models.entities.Event;
-import com.inside.models.entities.HowToBuy;
 import com.inside.models.entities.Image;
 import com.inside.models.entities.Interest;
-import com.inside.models.entities.Rule;
 import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
+import com.sun.javafx.scene.paint.GradientUtils.Point;
 
 
 public class InsideManagercesar {
@@ -162,7 +161,20 @@ public class InsideManagercesar {
 		return events;
 	}
 
+	public ArrayList<Event> getEventsByNearnes(float userLatittude, float userLongitude) {
+		Collections.sort(events, new Comparator<Event>() {
 
+			@Override
+			public int compare(Event o1, Event o2) {
+				double distanceA = Math.sqrt(Math.pow(userLatittude - o1.getAddress().getLatitude(),2) + Math.pow(userLongitude - o1.getAddress().getLongitude(),2));
+				double distanceB = Math.sqrt(Math.pow(userLatittude - o2.getAddress().getLatitude(),2) + Math.pow(userLongitude - o2.getAddress().getLongitude(),2));
+				return Boolean.compare(distanceA>=distanceB,true);
+			}
+		});
+		return events;
+	}
+
+	
 	public ArrayList<User> getUsers() {
 		return users;
 	}

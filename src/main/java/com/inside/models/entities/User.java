@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
 public class User {
-	
+
 	@JsonProperty("idUser")
 	private String idUser;
 	@JsonProperty("credential")
@@ -27,9 +27,9 @@ public class User {
 	private String nickname;
 	@JsonProperty("userInteres")
 	private ArrayList<Interest> userInteres;
-	
-	public User(String idUser, Credentials credential, Image image, String nameUser, String lastName,
-			Date birthDate, String nickname, ArrayList<Interest> userInteres) {
+
+	public User(String idUser, Credentials credential, Image image, String nameUser, String lastName, Date birthDate,
+			String nickname, ArrayList<Interest> userInteres) {
 		this.idUser = idUser;
 		this.credential = credential;
 		this.image = image;
@@ -42,7 +42,7 @@ public class User {
 			this.userInteres.add(interest);
 		}
 	}
-	
+
 	public User() {
 		// TODO Auto-generated constructor stub
 	}
@@ -117,9 +117,10 @@ public class User {
 				+ nameUser + ", lastName=" + lastName + ", birthDate=" + birthDate + ", nickname=" + nickname
 				+ ", userInteres=" + userInteres + "]";
 	}
-	
+
 	public void insertIntoDataBase() throws SQLException {
-		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?)");
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO USERS VALUES(?,?,?,?,?,?,?)");
 		preparedStatement.setString(1, this.idUser);
 		preparedStatement.setString(2, this.credential.getIdCredential());
 		preparedStatement.setString(3, this.image.getIdImage());
@@ -132,7 +133,7 @@ public class User {
 			insertUserInterestsIntoDatabase(this.userInteres.get(i));
 		}
 	}
-	
+
 	public void insertUserInterestsIntoDatabase(Interest interest) throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
 				.prepareStatement("INSERT INTO USER_INTERESTS VALUES(?,?)");
@@ -140,7 +141,7 @@ public class User {
 		preparedStatement.setString(2, interest.getIdInterest());
 		preparedStatement.execute();
 	}
-	
+
 	public static User searchUserIntoDatabase(String codigo) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM USERS WHERE ID_USER='" + codigo + "'");
@@ -161,8 +162,8 @@ public class User {
 
 		return userInside;
 	}
-	
-	public static ArrayList<Interest> searchInterestsIntoDatabase(String idUser) throws SQLException{
+
+	public static ArrayList<Interest> searchInterestsIntoDatabase(String idUser) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
 				.executeQuery("SELECT * FROM USER_INTERESTS WHERE ID_USER='" + idUser + "'");
 		ArrayList<Interest> interests = new ArrayList<>();
@@ -179,6 +180,7 @@ public class User {
 
 	/**
 	 * Lista todo los usuarios de la base de datos
+	 * 
 	 * @return
 	 * @throws SQLException
 	 */
@@ -198,7 +200,14 @@ public class User {
 
 	public void removeFromDatabase() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
-				.prepareStatement("DELETE FROM USERS WHERE USERS.ID_USER = "  + this.idUser);
+				.prepareStatement("DELETE FROM CREDENTIALS WHERE ID_CREDENTIALS=" + this.credential.getIdCredential());
 		preparedStatement.execute();
+		preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM IMAGES WHERE ID_IMAGE=" + this.image.getIdImage());
+		preparedStatement.execute();
+		 preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM USERS WHERE USERS.ID_USER = " + this.idUser);
+		preparedStatement.execute();
+		
 	}
 }
