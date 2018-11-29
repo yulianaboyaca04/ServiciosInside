@@ -64,4 +64,13 @@ public class EventsController {
 		Event ev = InsideManager.getInstance().searchEvent(idEvent);
 		return JsonManager.printJson(ev);
 	}
+
+	@RequestMapping(value = "/listEventsByNearness", method = RequestMethod.GET)
+	public String listEventsByNearness(@RequestParam(value = "latittude", defaultValue = "") String latittude,
+			@RequestParam(value = "longitude", defaultValue = "") String longitude) {
+		return JsonManager.printJson(InsideManagercesar.getInstance().getEventsByNearnes(Float.parseFloat(latittude),
+				Float.parseFloat(longitude)));
+
+	}
+
 }
