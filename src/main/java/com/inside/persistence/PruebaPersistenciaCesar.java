@@ -1,10 +1,5 @@
 package com.inside.persistence;
 
-import java.sql.SQLException;
-
-import com.inside.models.dao.InsideManager;
-import com.inside.models.entities.Interest;
-
 public class PruebaPersistenciaCesar {
 	
 	public static void main(String[] args) {
@@ -27,12 +22,9 @@ public class PruebaPersistenciaCesar {
 		
 //		System.out.println(JsonManager.printJson(InsideManager.getInstance().getEventsByNearnes(0f,0f)));
 		
-		try {
-			System.out.println(JsonManager.printJson(Interest.listAllInterests()));
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+//			System.out.println(JsonManager.printJson(InsideManager.getInstance().getViewsHistory()));
+
 /*
  		metodos listos:
  		

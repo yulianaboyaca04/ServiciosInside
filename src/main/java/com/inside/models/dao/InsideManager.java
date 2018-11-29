@@ -14,7 +14,6 @@ import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
 import com.inside.persistence.DataBaseAcces;
-import com.inside.persistence.JsonManager;
 
 public class InsideManager {
 
@@ -65,10 +64,20 @@ public class InsideManager {
 		} catch (SQLException | UserDoesntExists | EventDoesntExists e) {
 			e.printStackTrace();
 		}
-
-		attendanceHistory = new ArrayList<>();
-		viewsHistory = new ArrayList<>();
-
+		try {
+			System.out.println("Loading attendance history...");
+			listAllAttendanceHistory();
+			System.out.println("Attendance history loaded.");
+		} catch (SQLException | UserDoesntExists | EventDoesntExists e) {
+			e.printStackTrace();
+		}
+		try {
+			System.out.println("Loading views history...");
+			listAllViewsHistory();
+			System.out.println("Views history loaded.");
+		} catch (SQLException | UserDoesntExists | EventDoesntExists e) {
+			e.printStackTrace();
+		}
 	}
 
 	// -----------------------------------user------------------------------------------------
@@ -230,7 +239,30 @@ public class InsideManager {
 			Suscription suscription = new Suscription(us, ev);
 			suscriptions.add(suscription);
 		}
-
+	}
+	
+	public void listAllAttendanceHistory() throws SQLException, UserDoesntExists, EventDoesntExists {
+		attendanceHistory = new ArrayList<>();
+		ResultSet resultSet;
+		resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM ATTENDANCE_HISTORY");
+		while (resultSet.next()) {
+			User us = searchUser(resultSet.getString(1));
+			Event ev = searchEvent(resultSet.getString(2));
+			AttendanceHistory AttendanceHistory = new AttendanceHistory(us, ev);
+			attendanceHistory.add(AttendanceHistory);
+		}
 	}
 
+	public void listAllViewsHistory() throws SQLException, UserDoesntExists, EventDoesntExists {
+		viewsHistory = new ArrayList<>();
+		ResultSet resultSet;
+		resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM VIEWS_HISTORY");
+		while (resultSet.next()) {
+			User us = searchUser(resultSet.getString(1));
+			Event ev = searchEvent(resultSet.getString(2));
+			ViewsHistory viewHistory = new ViewsHistory(us, ev);
+			//TODO set del timestamp con el resultset 3
+			viewsHistory.add(viewHistory);
+		}
+	}
 }
