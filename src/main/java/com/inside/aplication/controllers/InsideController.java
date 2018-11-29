@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inside.exceptions.EventDoesntExists;
+import com.inside.exceptions.UserDoesntExists;
 import com.inside.models.dao.InsideManager;
 import com.inside.models.entities.Event;
 import com.inside.models.entities.User;
@@ -24,12 +25,6 @@ import com.inside.persistence.JsonManager;
 @RestController
 public class InsideController {
 
-
-
-	/**
-	 * Registra el usuario en la base de datos
-	 * @return
-	 */
 	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
 	public String createUser(@Valid @RequestBody User userInside) {
 		try {
@@ -37,51 +32,47 @@ public class InsideController {
 			userInside.getImage().insertIntoDataBase();
 			userInside.insertIntoDataBase();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			return e.getMessage();
 		}
-		return JsonManager.printJson(userInside);
+		return "User created";
 	}
-	
-	/**
-	 * 
-	 */
+
 	@RequestMapping(value = "/editUser", method = RequestMethod.POST)
 	public String editUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
+		// TODO
 		return "//TODO";
 	}
 
-	/**
-	 * Elimina el usuario de la base de datos y de la logica
-	 */
 	@RequestMapping(value = "/deleteUser", method = RequestMethod.GET)
 	public String deleteUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
 		try {
 			InsideManager.getInstance().deleteUser(idUser);
-		} catch (SQLException e) {
-			e.printStackTrace();
+		} catch (SQLException | UserDoesntExists e) {
+			return e.getMessage();
 		}
-		return "Successfully deleted user";
+		return "User deleted";
 	}
 
-	/**
-	 * Servicio para buscar un determinado usuario por su id
-	 * @param idUser
-	 * @return
-	 */
 	@RequestMapping(value = "/searchUser", method = RequestMethod.GET)
 	public String searchUser(@RequestParam(value = "idUser", defaultValue = "") String idUser) {
-		User user = InsideManager.getInstance().searchUser(idUser);
+		User user;
+		try {
+			user = InsideManager.getInstance().searchUser(idUser);
+		} catch (UserDoesntExists e) {
+			return e.getMessage();
+		}
 		return JsonManager.printJson(user);
 	}
 
 	@RequestMapping(value = "/deactivateUser", method = RequestMethod.POST)
 	public String deactivateUser() {
+		// TODO
 		return "//TODO";
 
 	}
 
 	// ---------------------------------event-------------------------
-	
+
 	@RequestMapping(value = "/createEventInside", method = RequestMethod.POST)
 	public String createEvent(@Valid @RequestBody Event event) {
 		try {
@@ -90,10 +81,6 @@ public class InsideController {
 			return e.getMessage();
 		}
 		return "Event created";
-
-//		
-//		InsideManager.getInstance().registerEvent(event);
-//		return JsonManager.printJson(event); // TODO cambiar por un log de la creacion
 	}
 
 	@RequestMapping(value = "/editEvent", method = RequestMethod.POST)
@@ -140,18 +127,21 @@ public class InsideController {
 
 	@RequestMapping(value = "/subscribeToEvent", method = RequestMethod.POST)
 	public String subscribeToEvent(User user, Event event) {
+		// TODO
 		return "//TODO";
 
 	}
 
 	@RequestMapping(value = "/registerAttendanceToEvent", method = RequestMethod.POST)
 	public String registerAttendanceToEvent(User user, Event event) {
+		// TODO
 		return "//TODO";
 
 	}
 
 	@RequestMapping(value = "/registerViewToEvent", method = RequestMethod.POST)
 	public String registerViewToEvent(User user, Event event) {
+		// TODO
 		return "//TODO";
 
 	}
@@ -170,18 +160,17 @@ public class InsideController {
 
 	@RequestMapping(value = "/getSuscriptions", method = RequestMethod.GET)
 	public String getSuscriptions() {
-		return "//TODO";
+		return JsonManager.printJson(InsideManager.getInstance().getSuscriptions());
 	}
 
 	@RequestMapping(value = "/getAttendanceHistory", method = RequestMethod.GET)
 	public String getAttendanceHistory() {
-		return "//TODO";
+		return JsonManager.printJson(InsideManager.getInstance().getAttendanceHistory());
 	}
 
 	@RequestMapping(value = "/getViewsHistory", method = RequestMethod.GET)
 	public String getViewsHistory() {
-		return "//TODO";
+		return JsonManager.printJson(InsideManager.getInstance().getViewsHistory());
 
 	}
-
 }
