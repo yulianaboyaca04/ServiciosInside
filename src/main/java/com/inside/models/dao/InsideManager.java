@@ -2,24 +2,19 @@ package com.inside.models.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-
+import com.inside.exceptions.EventDoesntExists;
 import com.inside.exceptions.UserDoesntExists;
-import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Credentials;
-import com.inside.models.entities.EventDate;
 import com.inside.models.entities.Event;
-import com.inside.models.entities.HowToBuy;
 import com.inside.models.entities.Image;
 import com.inside.models.entities.Interest;
-import com.inside.models.entities.Rule;
 import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
-import com.inside.persistence.DataBaseAcces;
-
 
 public class InsideManager {
 
@@ -117,46 +112,33 @@ public class InsideManager {
 
 	// ---------------------------------event-------------------------
 
-	/**
-	 * Crea un evento
-	 * @param idEvent
-	 * @param userCreator
-	 * @param howToBuy
-	 * @param address
-	 * @param eventDate
-	 * @param nameEvent
-	 * @param descriptionEvent
-	 * @param gallery
-	 * @param eventInterests
-	 * @param regulations
-	 * @return
-	 */
-	public Event createEvent(String idEvent, User userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
-			String nameEvent, String descriptionEvent, ArrayList<Image> gallery, ArrayList<Interest> eventInterests,
-			ArrayList<Rule> regulations) {
-		Event eventInside = new Event(idEvent, userCreator, howToBuy, address, eventDate, nameEvent, descriptionEvent, gallery, eventInterests, regulations);
-		return eventInside;
+	public void createEvent(Event event) throws SQLException {
+		event.getAddress().insertIntoDataBase();
+		event.getHowToBuy().insertIntoDataBase();
+		event.getEventDate().insertIntoDataBase();
+		event.insertIntoDataBase();
+		events.add(event);
 	}
 
-	public void editEvent() {
-		// TODO
+	public void editEvent(Event eventEdited) throws EventDoesntExists, SQLException {
+		Event ev = searchEvent(eventEdited.getIdEvent());
+		ev.edit(eventEdited);
 	}
 
-	public void deleteEvent() {
-
+	public void deleteEvent(String idEvent) throws EventDoesntExists, SQLException {
+		Event ev = searchEvent(idEvent);
+		events.remove(ev);
+		ev.removeFromDatabase();
 	}
 
-	public Event searchEvent(String idEvent) {
-		Event event = null;
-		try {
-			event = Event.searchEventIntoDatabase(idEvent);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public Event searchEvent(String idEvent) throws EventDoesntExists {
+		for (Event event : events) {
+			if (event.getIdEvent().equals(idEvent)) {
+				return event;
+			}
 		}
-		return event;
+		throw new EventDoesntExists();
 	}
-
 	//------------------------------------------------------------------------------
 
 	public void subscribeToEvent(User user, Event event) {
@@ -187,6 +169,19 @@ public class InsideManager {
 		return events;
 	}
 
+	public ArrayList<Event> getEventsByNearnes(float userLatittude, float userLongitude) {
+	Collections.sort(events, new Comparator<Event>() {
+
+		@Override
+		public int compare(Event o1, Event o2) {
+			double distanceA = Math.sqrt(Math.pow(userLatittude - o1.getAddress().getLatitude(),2) + Math.pow(userLongitude - o1.getAddress().getLongitude(),2));
+			double distanceB = Math.sqrt(Math.pow(userLatittude - o2.getAddress().getLatitude(),2) + Math.pow(userLongitude - o2.getAddress().getLongitude(),2));
+			return Boolean.compare(distanceA>=distanceB,true);
+		}
+	});
+	return events;
+}
+	
 	
 	public ArrayList<User> getUsers() {
 		try {

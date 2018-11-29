@@ -2,8 +2,6 @@ package com.inside.models.entities;
 
 import java.util.Date;
 
-import javax.swing.text.View;
-
 public class ViewsHistory {
 
 	private User user;
