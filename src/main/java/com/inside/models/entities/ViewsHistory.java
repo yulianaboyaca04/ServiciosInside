@@ -57,7 +57,7 @@ public class ViewsHistory {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("INSERT INTO VIEWS_HISTORY VALUES(?,?,?)");
 		preparedStatement.setString(1, this.user.getIdUser());
 		preparedStatement.setString(2, this.event.getIdEvent());
-		preparedStatement.setTimestamp(2, this.viewDate);
+		preparedStatement.setTimestamp(3, this.viewDate);
 		preparedStatement.execute();
 	}
 

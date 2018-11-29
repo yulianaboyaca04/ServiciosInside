@@ -119,12 +119,27 @@ public class InsideController {
 		}
 		return JsonManager.printJson(ev);
 	}
-
+	
 	@RequestMapping(value = "/listEventsByNearness", method = RequestMethod.GET)
 	public String listEventsByNearness(@RequestParam(value = "latittude", defaultValue = "") String latittude,
 			@RequestParam(value = "longitude", defaultValue = "") String longitude) {
 		return JsonManager.printJson(InsideManager.getInstance().getEventsByNearnes(Float.parseFloat(latittude),
 				Float.parseFloat(longitude)));
+	}
+	
+	@RequestMapping(value = "/listEventsByPopularity", method = RequestMethod.GET)
+	public String listEventsByNearness() {
+		return JsonManager.printJson(InsideManager.getInstance().getEventsbyPopularity());
+	}
+	
+	@RequestMapping(value = "/listEventsByPriceAscending", method = RequestMethod.GET)
+	public String listEventsByPriceAscending() {
+		return JsonManager.printJson(InsideManager.getInstance().getEventsByPriceAscending());
+	}
+	
+	@RequestMapping(value = "/listEventsByPriceDescending", method = RequestMethod.GET)
+	public String listEventsByPriceDescending() {
+		return JsonManager.printJson(InsideManager.getInstance().getEventsByPriceDescending());
 	}
 
 	// ------------------------------------------------------------------------------

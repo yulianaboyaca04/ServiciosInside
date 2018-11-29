@@ -197,6 +197,50 @@ public class InsideManager {
 		});
 		return events;
 	}
+	
+	public ArrayList<Event> getEventsbyPopularity() {
+		Collections.sort(events, new Comparator<Event>() {
+
+			@Override
+			public int compare(Event o1, Event o2) {
+				return getNumberOfSuscriptions(o2) - getNumberOfSuscriptions(o1);
+			}
+		});
+		return events;
+	}
+	
+	public int getNumberOfSuscriptions (Event event) {
+		int numberOfSuscriptions = 0;
+		for (Suscription suscription : suscriptions) {
+			if (suscription.getEvent().getIdEvent().equals(event.getIdEvent())) {
+				numberOfSuscriptions++;
+			}
+		}
+		return numberOfSuscriptions;
+	}
+	
+	public ArrayList<Event> getEventsByPriceAscending() {
+		Collections.sort(events, new Comparator<Event>() {
+
+			@Override
+			public int compare(Event o1, Event o2) {
+				return (int) (o1.getHowToBuy().getPrice() - o2.getHowToBuy().getPrice());
+			}
+		});
+		return events;
+	}
+	
+	public ArrayList<Event> getEventsByPriceDescending() {
+		Collections.sort(events, new Comparator<Event>() {
+
+			@Override
+			public int compare(Event o1, Event o2) {
+				return (int) (o2.getHowToBuy().getPrice() - o1.getHowToBuy().getPrice());
+			}
+		});
+		return events;
+	}
+	
 	// ----------------------------------getters&setters---------------------------------
 
 	public ArrayList<Event> getEvents() {
