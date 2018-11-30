@@ -5,11 +5,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
 public class Interest {
 
+	@JsonProperty("idInterest")
 	private String idInterest;
+	@JsonProperty("nameInterests")
 	private String nameInterests;
 
 	public Interest() {

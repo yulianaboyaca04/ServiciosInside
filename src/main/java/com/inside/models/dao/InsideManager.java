@@ -7,9 +7,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import com.inside.exceptions.EventDoesntExists;
 import com.inside.exceptions.UserDoesntExists;
+import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
 import com.inside.models.entities.Event;
+import com.inside.models.entities.Event.EventCard;
+import com.inside.models.entities.EventDate;
+import com.inside.models.entities.HowToBuy;
+import com.inside.models.entities.Image;
 import com.inside.models.entities.Interest;
+import com.inside.models.entities.Rule;
 import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
@@ -37,17 +43,18 @@ public class InsideManager {
 
 	private InsideManager() {
 		try {
-			System.out.println("Loading events...");
-			events = Event.listAllEvents();
-			System.out.println("Events loaded.");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		try {
 			System.out.println("Loading users...");
 			users = User.listAllUsers();
 			System.out.println("Users loaded.");
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			System.out.println("Loading events...");
+			events = listAllEvents();
+			System.out.println("Events loaded.");
+
+		} catch (SQLException | UserDoesntExists e) {
 			e.printStackTrace();
 		}
 		try {
@@ -197,7 +204,7 @@ public class InsideManager {
 		});
 		return events;
 	}
-	
+
 	public ArrayList<Event> getEventsbyPopularity() {
 		Collections.sort(events, new Comparator<Event>() {
 
@@ -208,8 +215,8 @@ public class InsideManager {
 		});
 		return events;
 	}
-	
-	public int getNumberOfSuscriptions (Event event) {
+
+	public int getNumberOfSuscriptions(Event event) {
 		int numberOfSuscriptions = 0;
 		for (Suscription suscription : suscriptions) {
 			if (suscription.getEvent().getIdEvent().equals(event.getIdEvent())) {
@@ -218,7 +225,7 @@ public class InsideManager {
 		}
 		return numberOfSuscriptions;
 	}
-	
+
 	public ArrayList<Event> getEventsByPriceAscending() {
 		Collections.sort(events, new Comparator<Event>() {
 
@@ -229,7 +236,7 @@ public class InsideManager {
 		});
 		return events;
 	}
-	
+
 	public ArrayList<Event> getEventsByPriceDescending() {
 		Collections.sort(events, new Comparator<Event>() {
 
@@ -240,11 +247,19 @@ public class InsideManager {
 		});
 		return events;
 	}
-	
+
 	// ----------------------------------getters&setters---------------------------------
 
 	public ArrayList<Event> getEvents() {
 		return events;
+	}
+
+	public ArrayList<EventCard> getEventCards() {
+		ArrayList<EventCard> eventCards = new ArrayList<>();
+		for (Event event : events) {
+			eventCards.add(event.getEventCard());
+		}
+		return eventCards;
 	}
 
 	public ArrayList<User> getUsers() {
@@ -284,7 +299,7 @@ public class InsideManager {
 			suscriptions.add(suscription);
 		}
 	}
-	
+
 	public void listAllAttendanceHistory() throws SQLException, UserDoesntExists, EventDoesntExists {
 		attendanceHistory = new ArrayList<>();
 		ResultSet resultSet;
@@ -305,8 +320,41 @@ public class InsideManager {
 			User us = searchUser(resultSet.getString(1));
 			Event ev = searchEvent(resultSet.getString(2));
 			ViewsHistory viewHistory = new ViewsHistory(us, ev);
-			//TODO set del timestamp con el resultset 3
+			// TODO set del timestamp con el resultset 3
 			viewsHistory.add(viewHistory);
 		}
 	}
+
+	public ArrayList<Event> listAllEvents() throws SQLException, UserDoesntExists {
+		ArrayList<Event> events = new ArrayList<>();
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM EVENTS " + 
+				"INNER JOIN HOW_TO_BUY ON EVENTS.ID_HOW_TO_BUY = HOW_TO_BUY.ID_HOW_TO_BUY " + 
+				"INNER JOIN ADDRESS ON EVENTS.ID_ADDRESS = ADDRESS.ID_ADDRESS " + 
+				"INNER JOIN DATES ON EVENTS.ID_DATE = DATES.ID_DATE");
+		while (resultSet.next()) {
+			Event ev = new Event(resultSet.getString(1),
+					searchUser(resultSet.getString(2)),
+					new HowToBuy(resultSet.getString(3), // idHowToBuy, descriptionHowToBuy, inPresence, price
+							resultSet.getString(9), resultSet.getBoolean(10), resultSet.getFloat(11)),
+					new Address(resultSet.getString(4), // idAddress, latitude, longitude, nameCity, namePlace
+							resultSet.getFloat(13), resultSet.getFloat(14), resultSet.getString(15),
+							resultSet.getString(16)),
+					new EventDate(resultSet.getString(5), // idDate, dateStart, dateFinish
+							resultSet.getTimestamp(18),
+							resultSet.getTimestamp(19)),
+					resultSet.getString(6),
+					resultSet.getString(7),
+					new ArrayList<Image>(),
+					new ArrayList<Interest>(),
+					new ArrayList<Rule>()); // TODO regulations
+			events.add(ev);
+		}
+		for (Event event : events) {
+			event.setGallery(Event.searchGalleryIntoDatabase(event.getIdEvent()));
+			event.setEventInterests(Event.searchEventInterestsIntoDatabase(event.getIdEvent()));
+			event.setRegulations(Event.searchRegulationsIntoDatabase(event.getIdEvent()));
+		}
+		return events;
+	}
+
 }

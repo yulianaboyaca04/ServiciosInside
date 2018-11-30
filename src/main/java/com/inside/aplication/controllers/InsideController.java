@@ -14,6 +14,7 @@ import com.inside.exceptions.EventDoesntExists;
 import com.inside.exceptions.UserDoesntExists;
 import com.inside.models.dao.InsideManager;
 import com.inside.models.entities.Event;
+import com.inside.models.entities.Interest;
 import com.inside.models.entities.User;
 import com.inside.persistence.JsonManager;
 
@@ -143,7 +144,13 @@ public class InsideController {
 	}
 
 	// ------------------------------------------------------------------------------
-
+	
+	@RequestMapping(value = "/addInterest", method = RequestMethod.POST)
+	public void addInterest(@Valid @RequestBody Interest interest) {
+		InsideManager.getInstance().addInterest(interest);
+		
+	}
+	
 	@RequestMapping(value = "/subscribeToEvent", method = RequestMethod.GET)
 	public String subscribeToEvent(@RequestParam(value = "idUser", defaultValue = "") String idUser, 
 			@RequestParam(value = "idEvent", defaultValue = "") String idEvent) {
@@ -188,7 +195,12 @@ public class InsideController {
 	public String getEvents() {
 		return JsonManager.printJson(InsideManager.getInstance().getEvents());
 	}
-
+	
+	@RequestMapping(value = "/getEventCards", method = RequestMethod.GET)
+	public String getEventCards() {
+		return JsonManager.printJson(InsideManager.getInstance().getEventCards());
+	}
+	
 	@RequestMapping(value = "/getUsers", method = RequestMethod.GET)
 	public String getUsers() {
 		return JsonManager.printJson(InsideManager.getInstance().getUsers());

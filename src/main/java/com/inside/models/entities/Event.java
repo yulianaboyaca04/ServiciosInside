@@ -3,6 +3,7 @@ package com.inside.models.entities;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
@@ -59,6 +60,11 @@ public class Event {
 		}
 	}
 
+	public EventCard getEventCard() {
+		return new EventCard(this.idEvent, this.nameEvent, this.address.getNameCity(), this.userCreator.getIdUser(),
+				this.userCreator.getNameUser() + " " + this.userCreator.getLastName(), this.eventDate.getDateStart());
+	}
+
 	// -----------------------------inserts-en-bd-----------------------------------------------------------------
 	public void insertIntoDataBase() throws SQLException {
 		insertEventIntoDatabaseBasic();
@@ -111,51 +117,6 @@ public class Event {
 	}
 
 	// ----------------------------querys-en-bd---------------------------------------------------------------------
-	public static ArrayList<Event> listAllEvents() throws SQLException {
-		ArrayList<Event> events = new ArrayList<>();
-		ArrayList<String> idEvents = new ArrayList<>();
-		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM EVENTS");
-		while (resultSet.next()) {
-			idEvents.add(resultSet.getString(1));
-		}
-		for (String idEvent : idEvents) {
-			Event event = searchEventIntoDatabase(idEvent);
-			events.add(event);
-		}
-		return events;
-	}
-
-	public static Event searchEventIntoDatabase(String codigo) throws SQLException {
-		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
-				.executeQuery("SELECT * FROM EVENTS WHERE id_event='" + codigo + "'");
-		Event event = new Event();
-		while (resultSet.next()) {
-			event = generateEventFromResultSet(resultSet);
-			break;
-		}
-		return event;
-	}
-
-	private static Event generateEventFromResultSet(ResultSet resultSet) throws SQLException {
-		Event event = new Event();
-
-		event.idEvent = resultSet.getString(1);
-		event.nameEvent = resultSet.getString(6);
-		event.descriptionEvent = resultSet.getString(7);
-		String idHowToBuy = resultSet.getString(3);
-		String idAdrress = resultSet.getString(4);
-		String idEventDate = resultSet.getString(5);
-
-		event.userCreator = User.searchUserIntoDatabase(resultSet.getString(2));
-		event.howToBuy = HowToBuy.searchHowToBuyIntoDatabase(idHowToBuy, resultSet);
-		event.address = Address.searchAddressIntoDatabase(idAdrress, resultSet);
-		event.eventDate = EventDate.searchEventDateIntoDatabase(idEventDate, resultSet);
-
-		event.gallery = searchGalleryIntoDatabase(event.idEvent);
-		event.eventInterests = searchEventInterestsIntoDatabase(event.idEvent);
-		event.regulations = searchRegulationsIntoDatabase(event.idEvent);
-		return event;
-	}
 
 	public static ArrayList<Image> searchGalleryIntoDatabase(String idEvent) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
@@ -374,4 +335,23 @@ public class Event {
 				+ eventInterests + ", regulations=" + regulations + "]";
 	}
 
+	public class EventCard {
+		String idEvent;
+		String nameEvent;
+		String nameCitY;
+		String idUserCreator;
+		String nameUser;
+		Timestamp dateStart;
+
+		public EventCard(String idEvent, String nameEvent, String nameCitY, String idUserCreator, String nameUser,
+				Timestamp dateStart) {
+			super();
+			this.idEvent = idEvent;
+			this.nameEvent = nameEvent;
+			this.nameCitY = nameCitY;
+			this.idUserCreator = idUserCreator;
+			this.nameUser = nameUser;
+			this.dateStart = dateStart;
+		}
+	}
 }
