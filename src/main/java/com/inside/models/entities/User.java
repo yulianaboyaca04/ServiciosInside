@@ -74,40 +74,6 @@ public class User {
 	}
 	
 	// ----------------------------querys-en-bd---------------------------------------------------------------------
-	public static ArrayList<User> listAllUsers() throws SQLException {
-		ArrayList<User> users = new ArrayList<>();
-		ArrayList<String> idUsers = new ArrayList<>();
-		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM USERS");
-		while (resultSet.next()) {
-			idUsers.add(resultSet.getString(1));
-		}
-		for (String idEvent : idUsers) {
-			User user = searchUserIntoDatabase(idEvent);
-			users.add(user);
-		}
-		return users;
-	}
-
-	public static User searchUserIntoDatabase(String codigo) throws SQLException {
-		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
-				.executeQuery("SELECT * FROM USERS WHERE ID_USER='" + codigo + "'");
-		User userInside = new User();
-		while (resultSet.next()) {
-			userInside.idUser = resultSet.getString(1);
-			userInside.nameUser = resultSet.getString(4);
-			userInside.lastName = resultSet.getString(5);
-			userInside.birthDate = resultSet.getDate(6);
-			userInside.nickname = resultSet.getString(7);
-			String idCredential = resultSet.getString(2);
-			String idImage = resultSet.getString(3);
-			userInside.credential = Credentials.searchUserIntoDatabase(idCredential, resultSet);
-			userInside.image = Image.searchUserIntoDatabase(idImage);
-			userInside.userInteres = searchInterestsIntoDatabase(userInside.idUser);
-			break;
-		}
-
-		return userInside;
-	}
 
 	public static ArrayList<Interest> searchInterestsIntoDatabase(String idUser) throws SQLException {
 		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()

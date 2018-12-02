@@ -6,7 +6,7 @@ public class PruebaPersistenciaCesar {
 
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
-		System.out.println(JsonManager.printJson(InsideManager.getInstance().getEvents()));
+		System.out.println(JsonManager.printJson(InsideManager.getInstance().getUsers()));
 		
 		long end = System.currentTimeMillis();
 

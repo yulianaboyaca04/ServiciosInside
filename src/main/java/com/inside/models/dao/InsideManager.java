@@ -9,6 +9,8 @@ import com.inside.exceptions.EventDoesntExists;
 import com.inside.exceptions.UserDoesntExists;
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
+import com.inside.models.entities.Credentials;
+import com.inside.models.entities.CredentialsType;
 import com.inside.models.entities.Event;
 import com.inside.models.entities.Event.EventCard;
 import com.inside.models.entities.EventDate;
@@ -20,6 +22,7 @@ import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
 import com.inside.persistence.DataBaseAcces;
+import com.inside.persistence.JsonManager;
 
 public class InsideManager {
 
@@ -44,9 +47,9 @@ public class InsideManager {
 	private InsideManager() {
 		try {
 			System.out.println("Loading users...");
-			users = User.listAllUsers();
+			users = listAllUsers();
 			System.out.println("Users loaded.");
-		} catch (SQLException e) {
+		} catch (SQLException | UserDoesntExists e) {
 			e.printStackTrace();
 		}
 		try {
@@ -89,8 +92,10 @@ public class InsideManager {
 
 	// -----------------------------------user------------------------------------------------
 	public void registerUser(User userInside) throws SQLException {
-		users.add(userInside);
+		userInside.getCredential().insertIntoDataBase();
+		userInside.getImage().insertIntoDataBase();
 		userInside.insertIntoDataBase();
+		users.add(userInside);
 	}
 
 	public void editUser(User userEdited) throws UserDoesntExists, SQLException {
@@ -118,6 +123,18 @@ public class InsideManager {
 
 	}
 
+	public User autenthicate(Credentials credentials) throws UserDoesntExists {
+		for (User user : users) {
+			if (user.getCredential().getCredentialsType().getIdCredentials().equals(credentials.getCredentialsType().getIdCredentials())
+					&& user.getCredential().getUserName().equals(credentials.getUserName()) && 
+					user.getCredential().getPasswordOrToken().equals(credentials.getPasswordOrToken())) {
+			
+				return user;
+			}
+		}
+		throw new UserDoesntExists();
+	}
+	
 	// ---------------------------------event-------------------------------------------------
 
 	public void createEvent(Event event) throws SQLException {
@@ -180,9 +197,9 @@ public class InsideManager {
 	// --------------------------------------intereses----------------------------------------
 
 	public void addInterest(Interest interest) {
-		this.interests.add(interest);
 		try {
 			interest.insertIntoDataBase();
+			this.interests.add(interest);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -355,6 +372,34 @@ public class InsideManager {
 			event.setRegulations(Event.searchRegulationsIntoDatabase(event.getIdEvent()));
 		}
 		return events;
+	}
+
+	public ArrayList<User> listAllUsers() throws SQLException, UserDoesntExists {
+		ArrayList<User> users = new ArrayList<>();
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM USERS " + 
+				"INNER JOIN CREDENTIALS ON USERS.ID_CREDENTIAL = CREDENTIALS.ID_CREDENTIAL " + 
+				"INNER JOIN CREDENTIALS_TYPE ON CREDENTIALS.ID_CREDENTIALS_TYPE = CREDENTIALS_TYPE.ID_CREDENTIALS_TYPE " + 
+				"INNER JOIN IMAGES ON USERS.ID_IMAGE = IMAGES.ID_IMAGE");
+		while (resultSet.next()) {
+			User us = new User(resultSet.getString(1),//idUser, credential, image, nameUser, lastName, birthDate, nickname, userInteres
+					new Credentials(resultSet.getString(2),  // idCredential, credentialsType, user, passwordOrToken
+							new CredentialsType(resultSet.getString(9),//idCredentials, name 
+									resultSet.getString(13)), 
+							resultSet.getString(10),
+							resultSet.getString(11)),
+					new Image(resultSet.getString(3), //idImage, content
+							resultSet.getString(15)),
+					resultSet.getString(4),
+					resultSet.getString(5),
+					resultSet.getDate(6),
+					resultSet.getString(7),
+					new ArrayList<Interest>()) ;
+			users.add(us);
+		}
+		for (User user : users) {
+			user.setUserInteres(User.searchInterestsIntoDatabase(user.getIdUser()));
+		}
+		return users;
 	}
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.inside.exceptions.EventDoesntExists;
 import com.inside.exceptions.UserDoesntExists;
 import com.inside.models.dao.InsideManager;
+import com.inside.models.entities.Credentials;
 import com.inside.models.entities.Event;
 import com.inside.models.entities.Interest;
 import com.inside.models.entities.User;
@@ -30,9 +31,7 @@ public class InsideController {
 	@RequestMapping(value = "/createUserInside", method = RequestMethod.POST)
 	public String createUser(@Valid @RequestBody User userInside) {
 		try {
-			userInside.getCredential().insertIntoDataBase();
-			userInside.getImage().insertIntoDataBase();
-			userInside.insertIntoDataBase();
+			InsideManager.getInstance().registerUser(userInside);
 		} catch (SQLException e) {
 			return e.getMessage();
 		}
@@ -75,6 +74,17 @@ public class InsideController {
 		// TODO
 		return "//TODO";
 
+	}
+	
+	@RequestMapping(value = "/autenthicate", method = RequestMethod.POST)
+	public String autenthicate(@Valid @RequestBody Credentials credentials) {
+		User user;
+		try {
+			user = InsideManager.getInstance().autenthicate(credentials);
+		} catch (UserDoesntExists e) {
+			return e.getMessage();
+		}
+		return JsonManager.printJson(user);
 	}
 
 	// ---------------------------------event-------------------------
