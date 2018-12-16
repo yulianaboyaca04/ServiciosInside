@@ -2,10 +2,12 @@ package com.inside.models.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import com.inside.exceptions.EventDoesntExists;
+import com.inside.exceptions.SuscriptionDoesntExists;
 import com.inside.exceptions.UserDoesntExists;
 import com.inside.models.entities.Address;
 import com.inside.models.entities.AttendanceHistory;
@@ -22,7 +24,6 @@ import com.inside.models.entities.Suscription;
 import com.inside.models.entities.User;
 import com.inside.models.entities.ViewsHistory;
 import com.inside.persistence.DataBaseAcces;
-import com.inside.persistence.JsonManager;
 
 public class InsideManager {
 
@@ -91,23 +92,83 @@ public class InsideManager {
 	}
 
 	// -----------------------------------user------------------------------------------------
-	public void registerUser(User userInside) throws SQLException {
+	public User registerUser(User userInside) throws SQLException {
+		String userId = DataBaseAcces.getKeyNextVal("USERS", "ID_USER");
+		userInside.setIdUser(userId);
+		userInside.getCredential().setIdCredential(userId);
+		String imageId = DataBaseAcces.getKeyNextVal("IMAGES", "ID_IMAGE");
+		Image img = new Image(imageId, userInside.getImage().getContent());
+		userInside.setImage(img);
+
 		userInside.getCredential().insertIntoDataBase();
 		userInside.getImage().insertIntoDataBase();
 		userInside.insertIntoDataBase();
 		users.add(userInside);
+		return userInside;
 	}
 
-	public void editUser(User userEdited) throws UserDoesntExists, SQLException {
+	public User editUser(User userEdited) throws UserDoesntExists, SQLException {
 		User us = searchUser(userEdited.getIdUser());
 		us.edit(userEdited);
+		for (Event event : events) {
+			if (event.getUserCreator().getIdUser().equals(userEdited.getIdUser())) {
+				event.setUserCreator(userEdited);
+			}
+		}
+		return us;
 	}
 
 	public void deleteUser(String idUser) throws SQLException, UserDoesntExists {
 		User user = searchUser(idUser);
 		user.removeFromDatabase();
 		users.remove(user);
+		removeUserFromAnaywhere(idUser);
+	}
 
+	private void removeUserFromAnaywhere(String idUser) {
+		// remove from suscriptions
+		ArrayList<Suscription> suscriptionstoDelete = new ArrayList<Suscription>();
+		for (Suscription suscription : suscriptions) {
+			if (suscription.getUser().getIdUser().equals(idUser)) {
+				suscriptionstoDelete.add(suscription);
+			}
+		}
+		for (Suscription suscription : suscriptionstoDelete) {
+			suscriptions.remove(suscription);
+		}
+
+		// remove from events
+		ArrayList<Event> eventstoDelete = new ArrayList<Event>();
+		for (Event event : events) {
+			if (event.getUserCreator().getIdUser().equals(idUser)) {
+				eventstoDelete.add(event);
+			}
+		}
+		for (Event event : eventstoDelete) {
+			events.remove(event);
+		}
+
+		// remove from attendance
+		ArrayList<AttendanceHistory> attendanceToDelete = new ArrayList<AttendanceHistory>();
+		for (AttendanceHistory attendanceHistoryRegistry : attendanceHistory) {
+			if (attendanceHistoryRegistry.getUser().getIdUser().equals(idUser)) {
+				attendanceToDelete.add(attendanceHistoryRegistry);
+			}
+		}
+		for (AttendanceHistory attendanceHistoryRegistry : attendanceToDelete) {
+			attendanceHistory.remove(attendanceHistoryRegistry);
+		}
+
+		// remove from view
+		ArrayList<ViewsHistory> viewToDelete = new ArrayList<ViewsHistory>();
+		for (ViewsHistory viewsHistoryRegistry : viewsHistory) {
+			if (viewsHistoryRegistry.getUser().getIdUser().equals(idUser)) {
+				viewToDelete.add(viewsHistoryRegistry);
+			}
+		}
+		for (ViewsHistory viewsHistoryRegistry : viewToDelete) {
+			viewsHistory.remove(viewsHistoryRegistry);
+		}
 	}
 
 	public User searchUser(String idUser) throws UserDoesntExists {
@@ -125,35 +186,109 @@ public class InsideManager {
 
 	public User autenthicate(Credentials credentials) throws UserDoesntExists {
 		for (User user : users) {
-			if (user.getCredential().getCredentialsType().getIdCredentials().equals(credentials.getCredentialsType().getIdCredentials())
-					&& user.getCredential().getUserName().equals(credentials.getUserName()) && 
-					user.getCredential().getPasswordOrToken().equals(credentials.getPasswordOrToken())) {
-			
+			if (user.getCredential().getCredentialsType().getIdCredentials()
+					.equals(credentials.getCredentialsType().getIdCredentials())
+					&& user.getCredential().getUserName().equals(credentials.getUserName())
+					&& user.getCredential().getPasswordOrToken().equals(credentials.getPasswordOrToken())) {
+
 				return user;
 			}
 		}
 		throw new UserDoesntExists();
 	}
+
+	public ArrayList<String> getEventsCreatedAndInsides(String idUser) {
+		ArrayList<String> content = new ArrayList<String>();
+		int counterEvents = 0;
+		int counterInsides = 0;
+		for (Event event : events) {
+			if (event.getUserCreator().getIdUser().equals(idUser)) {
+				counterEvents++;
+			}
+		}
+		for (Suscription suscription : suscriptions) {
+			if (suscription.getUser().getIdUser().equals(idUser)) {
+				counterInsides++;
+			}
+		}
+		content.add(counterEvents + " Evento(s) creado(s).");
+		content.add(counterInsides + " Inside(s).");
+		return content;
+	}
 	
 	// ---------------------------------event-------------------------------------------------
 
-	public void createEvent(Event event) throws SQLException {
+	public Event createEvent(Event event) throws SQLException {
+		String idEvent = DataBaseAcces.getKeyNextVal("EVENTS", "ID_EVENT");
+		String idHowToBuy = DataBaseAcces.getKeyNextVal("HOW_TO_BUY", "ID_HOW_TO_BUY");
+		String idAddress = DataBaseAcces.getKeyNextVal("ADDRESS", "ID_ADDRESS");
+		String idDate = DataBaseAcces.getKeyNextVal("DATES", "ID_DATE");
+
+		event.setIdEvent(idEvent);
+		event.getHowToBuy().setIdHowToBuy(idHowToBuy);
+		event.getAddress().setIdAddress(idAddress);
+		event.getEventDate().setIdDate(idDate);
+
+		event.getGallery().add(new Image(DataBaseAcces.getKeyNextVal("IMAGES", "ID_IMAGE"),"https://s3.amazonaws.com/nside-20181215124008-deployment/public/"+idEvent+"imageEvent.jpg"));
 		event.getAddress().insertIntoDataBase();
 		event.getHowToBuy().insertIntoDataBase();
 		event.getEventDate().insertIntoDataBase();
 		event.insertIntoDataBase();
 		events.add(event);
+		return event;
 	}
 
-	public void editEvent(Event eventEdited) throws EventDoesntExists, SQLException {
+	public Event editEvent(Event eventEdited) throws EventDoesntExists, SQLException {
 		Event ev = searchEvent(eventEdited.getIdEvent());
 		ev.edit(eventEdited);
+		for (Suscription suscriptions : suscriptions) {
+			if (suscriptions.getEvent().getIdEvent().equals(eventEdited.getIdEvent())) {
+				suscriptions.setEvent(eventEdited);
+			}
+		}
+		return eventEdited;
 	}
 
 	public void deleteEvent(String idEvent) throws EventDoesntExists, SQLException {
 		Event ev = searchEvent(idEvent);
 		events.remove(ev);
 		ev.removeFromDatabase();
+		removeEventFromAnywhere(idEvent);
+	}
+
+	private void removeEventFromAnywhere(String idEvent) {
+		// remove from suscriptions
+		ArrayList<Suscription> suscriptionstoDelete = new ArrayList<Suscription>();
+		for (Suscription suscription : suscriptions) {
+			if (suscription.getEvent().getIdEvent().equals(idEvent)) {
+				suscriptionstoDelete.add(suscription);
+			}
+		}
+		for (Suscription suscription : suscriptionstoDelete) {
+			suscriptions.remove(suscription);
+		}
+		// remove from attendance
+		ArrayList<AttendanceHistory> attendanceToDelete = new ArrayList<AttendanceHistory>();
+		for (AttendanceHistory attendanceHistoryRegistry : attendanceHistory) {
+			if (attendanceHistoryRegistry.getEvent().getIdEvent().equals(idEvent)) {
+				attendanceToDelete.add(attendanceHistoryRegistry);
+			}
+		}
+		for (AttendanceHistory attendanceHistoryRegistry : attendanceToDelete) {
+			attendanceHistory.remove(attendanceHistoryRegistry);
+		}
+
+		// remove from view
+		ArrayList<ViewsHistory> viewToDelete = new ArrayList<ViewsHistory>();
+		for (ViewsHistory viewsHistoryRegistry : viewsHistory) {
+			if (viewsHistoryRegistry.getEvent().getIdEvent().equals(idEvent)) {
+				viewToDelete.add(viewsHistoryRegistry);
+			}
+		}
+		for (ViewsHistory viewsHistoryRegistry : viewToDelete) {
+			viewsHistory.remove(viewsHistoryRegistry);
+		}
+
 	}
 
 	public Event searchEvent(String idEvent) throws EventDoesntExists {
@@ -167,13 +302,40 @@ public class InsideManager {
 
 	// ------------------------------------rompimientos--------------------------------------
 
-	public void subscribeToEvent(String idUser, String idEvent)
+	public Suscription subscribeToEvent(String idUser, String idEvent)
 			throws SQLException, UserDoesntExists, EventDoesntExists {
 		User user = searchUser(idUser);
 		Event event = searchEvent(idEvent);
 		Suscription suscription = new Suscription(user, event);
 		suscription.insertIntoDataBase();
 		this.suscriptions.add(suscription);
+		return suscription;
+	}
+
+	public String unSubscribeToEvent(String idUser, String idEvent)
+			throws UserDoesntExists, EventDoesntExists, SQLException {
+		User user = searchUser(idUser);
+		Event event = searchEvent(idEvent);
+		Suscription suscriptionToDelete = null;
+		for (Suscription suscription : suscriptions) {
+			if (suscription.getEvent().getIdEvent().equals(event.getIdEvent())
+					&& suscription.getUser().getIdUser().equals(user.getIdUser())) {
+				suscription.deleteFromDataBase();
+				suscriptionToDelete = suscription;
+			}
+		}
+		suscriptions.remove(suscriptionToDelete);
+		return "SuscriptionDeleted";
+	}
+
+	public Suscription checkIfSubscribed(String idUser, String idEvent) throws SuscriptionDoesntExists {
+		for (Suscription suscription : suscriptions) {
+			if (suscription.getUser().getIdUser().equals(idUser)
+					&& suscription.getEvent().getIdEvent().equals(idEvent)) {
+				return suscription;
+			}
+		}
+		throw new SuscriptionDoesntExists();
 	}
 
 	public void registerAttendanceToEvent(String idUser, String idEvent)
@@ -196,19 +358,27 @@ public class InsideManager {
 
 	// --------------------------------------intereses----------------------------------------
 
-	public void addInterest(Interest interest) {
-		try {
-			interest.insertIntoDataBase();
-			this.interests.add(interest);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void addInterest(Interest interest) throws SQLException {
+		interest.insertIntoDataBase();
+		this.interests.add(interest);
 	}
 
 	// ---------------------------------------filtros------------------------------------------
 
 	public ArrayList<Event> getEventsByNearnes(float userLatittude, float userLongitude) {
-		Collections.sort(events, new Comparator<Event>() {
+		ArrayList<Event> sponsoredEvents = new ArrayList<Event>();
+		ArrayList<Event> unSponsoredEvents = new ArrayList<Event>();
+		for (Event event : events) {
+			Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+			Timestamp evenDate = event.getEventDate().getDateStart();
+			float daysRemaining = ((evenDate.getTime() - currentDate.getTime()) / 81400000);
+			if (daysRemaining <= event.getDaysSponsored() && daysRemaining > 0) {
+				sponsoredEvents.add(event);
+			} else {
+				unSponsoredEvents.add(event);
+			}
+		}
+		Collections.sort(sponsoredEvents, new Comparator<Event>() {
 
 			@Override
 			public int compare(Event o1, Event o2) {
@@ -219,24 +389,60 @@ public class InsideManager {
 				return Boolean.compare(distanceA >= distanceB, true);
 			}
 		});
-		return events;
-	}
-
-	public ArrayList<Event> getEventsbyPopularity() {
-		Collections.sort(events, new Comparator<Event>() {
+		Collections.sort(unSponsoredEvents, new Comparator<Event>() {
 
 			@Override
 			public int compare(Event o1, Event o2) {
-				return getNumberOfSuscriptions(o2) - getNumberOfSuscriptions(o1);
+				double distanceA = Math.sqrt(Math.pow(userLatittude - o1.getAddress().getLatitude(), 2)
+						+ Math.pow(userLongitude - o1.getAddress().getLongitude(), 2));
+				double distanceB = Math.sqrt(Math.pow(userLatittude - o2.getAddress().getLatitude(), 2)
+						+ Math.pow(userLongitude - o2.getAddress().getLongitude(), 2));
+				return Boolean.compare(distanceA >= distanceB, true);
 			}
 		});
-		return events;
+		for (Event event : unSponsoredEvents) {
+			sponsoredEvents.add(event);
+		}
+		return sponsoredEvents;
 	}
 
-	public int getNumberOfSuscriptions(Event event) {
+	public ArrayList<Event> getEventsbyPopularity() {
+		ArrayList<Event> sponsoredEvents = new ArrayList<Event>();
+		ArrayList<Event> unSponsoredEvents = new ArrayList<Event>();
+		for (Event event : events) {
+			Timestamp currentDate = new Timestamp(System.currentTimeMillis());
+			Timestamp evenDate = event.getEventDate().getDateStart();
+			float daysRemaining = ((evenDate.getTime() - currentDate.getTime()) / 81400000);
+			if (daysRemaining <= event.getDaysSponsored() && daysRemaining > 0) {
+				sponsoredEvents.add(event);
+			} else {
+				unSponsoredEvents.add(event);
+			}
+		}
+		Collections.sort(sponsoredEvents, new Comparator<Event>() {
+
+			@Override
+			public int compare(Event o1, Event o2) {
+				return getNumberOfSuscriptions(o2.getIdEvent()) - getNumberOfSuscriptions(o1.getIdEvent());
+			}
+		});
+		Collections.sort(unSponsoredEvents, new Comparator<Event>() {
+
+			@Override
+			public int compare(Event o1, Event o2) {
+				return getNumberOfSuscriptions(o2.getIdEvent()) - getNumberOfSuscriptions(o1.getIdEvent());
+			}
+		});
+		for (Event event : unSponsoredEvents) {
+			sponsoredEvents.add(event);
+		}
+		return sponsoredEvents;
+	}
+
+	public int getNumberOfSuscriptions(String idEvent) {
 		int numberOfSuscriptions = 0;
 		for (Suscription suscription : suscriptions) {
-			if (suscription.getEvent().getIdEvent().equals(event.getIdEvent())) {
+			if (suscription.getEvent().getIdEvent().equals(idEvent)) {
 				numberOfSuscriptions++;
 			}
 		}
@@ -256,7 +462,6 @@ public class InsideManager {
 
 	public ArrayList<Event> getEventsByPriceDescending() {
 		Collections.sort(events, new Comparator<Event>() {
-
 			@Override
 			public int compare(Event o1, Event o2) {
 				return (int) (o2.getHowToBuy().getPrice() - o1.getHowToBuy().getPrice());
@@ -265,6 +470,25 @@ public class InsideManager {
 		return events;
 	}
 
+
+	public ArrayList<Event> getEventsByInterest(String idUser) throws UserDoesntExists {
+		ArrayList<Event> eventsByInterest = new ArrayList<Event>();
+		User user = searchUser(idUser);
+		for (Event event : events) {
+			for (Interest interest : user.getUserInteres()) {
+				if (event.getEventInterests().contains(interest) && (!eventsByInterest.contains(event))) {
+					eventsByInterest.add(event);
+				}
+			}
+		}
+		for (Event event : events) {
+			if (!eventsByInterest.contains(event)) {
+				eventsByInterest.add(event);
+			}
+		}
+		return eventsByInterest;
+	}
+	
 	// ----------------------------------getters&setters---------------------------------
 
 	public ArrayList<Event> getEvents() {
@@ -344,26 +568,22 @@ public class InsideManager {
 
 	public ArrayList<Event> listAllEvents() throws SQLException, UserDoesntExists {
 		ArrayList<Event> events = new ArrayList<>();
-		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM EVENTS " + 
-				"INNER JOIN HOW_TO_BUY ON EVENTS.ID_HOW_TO_BUY = HOW_TO_BUY.ID_HOW_TO_BUY " + 
-				"INNER JOIN ADDRESS ON EVENTS.ID_ADDRESS = ADDRESS.ID_ADDRESS " + 
-				"INNER JOIN DATES ON EVENTS.ID_DATE = DATES.ID_DATE");
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement()
+				.executeQuery("SELECT * FROM EVENTS "
+						+ "INNER JOIN HOW_TO_BUY ON EVENTS.ID_HOW_TO_BUY = HOW_TO_BUY.ID_HOW_TO_BUY "
+						+ "INNER JOIN ADDRESS ON EVENTS.ID_ADDRESS = ADDRESS.ID_ADDRESS "
+						+ "INNER JOIN DATES ON EVENTS.ID_DATE = DATES.ID_DATE");
 		while (resultSet.next()) {
-			Event ev = new Event(resultSet.getString(1),
-					searchUser(resultSet.getString(2)),
+			Event ev = new Event(resultSet.getString(1), searchUser(resultSet.getString(2)),
 					new HowToBuy(resultSet.getString(3), // idHowToBuy, descriptionHowToBuy, inPresence, price
-							resultSet.getString(9), resultSet.getBoolean(10), resultSet.getFloat(11)),
+							resultSet.getString(10), resultSet.getBoolean(11), resultSet.getFloat(12)),
 					new Address(resultSet.getString(4), // idAddress, latitude, longitude, nameCity, namePlace
-							resultSet.getFloat(13), resultSet.getFloat(14), resultSet.getString(15),
-							resultSet.getString(16)),
+							resultSet.getFloat(14), resultSet.getFloat(15), resultSet.getString(16),
+							resultSet.getString(17)),
 					new EventDate(resultSet.getString(5), // idDate, dateStart, dateFinish
-							resultSet.getTimestamp(18),
-							resultSet.getTimestamp(19)),
-					resultSet.getString(6),
-					resultSet.getString(7),
-					new ArrayList<Image>(),
-					new ArrayList<Interest>(),
-					new ArrayList<Rule>()); // TODO regulations
+							resultSet.getTimestamp(19), resultSet.getTimestamp(20)),
+					resultSet.getString(6), resultSet.getString(7), resultSet.getFloat(8), new ArrayList<Image>(),
+					new ArrayList<Interest>(), new ArrayList<Rule>()); // TODO regulations
 			events.add(ev);
 		}
 		for (Event event : events) {
@@ -376,24 +596,21 @@ public class InsideManager {
 
 	public ArrayList<User> listAllUsers() throws SQLException, UserDoesntExists {
 		ArrayList<User> users = new ArrayList<>();
-		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM USERS " + 
-				"INNER JOIN CREDENTIALS ON USERS.ID_CREDENTIAL = CREDENTIALS.ID_CREDENTIAL " + 
-				"INNER JOIN CREDENTIALS_TYPE ON CREDENTIALS.ID_CREDENTIALS_TYPE = CREDENTIALS_TYPE.ID_CREDENTIALS_TYPE " + 
-				"INNER JOIN IMAGES ON USERS.ID_IMAGE = IMAGES.ID_IMAGE");
+		ResultSet resultSet = DataBaseAcces.getInstance().getStatement().executeQuery("SELECT * FROM USERS "
+				+ "INNER JOIN CREDENTIALS ON USERS.ID_CREDENTIAL = CREDENTIALS.ID_CREDENTIAL "
+				+ "INNER JOIN CREDENTIALS_TYPE ON CREDENTIALS.ID_CREDENTIALS_TYPE = CREDENTIALS_TYPE.ID_CREDENTIALS_TYPE "
+				+ "INNER JOIN IMAGES ON USERS.ID_IMAGE = IMAGES.ID_IMAGE");
 		while (resultSet.next()) {
-			User us = new User(resultSet.getString(1),//idUser, credential, image, nameUser, lastName, birthDate, nickname, userInteres
-					new Credentials(resultSet.getString(2),  // idCredential, credentialsType, user, passwordOrToken
-							new CredentialsType(resultSet.getString(9),//idCredentials, name 
-									resultSet.getString(13)), 
-							resultSet.getString(10),
-							resultSet.getString(11)),
-					new Image(resultSet.getString(3), //idImage, content
+			User us = new User(resultSet.getString(1), // idUser, credential, image, nameUser, lastName, birthDate,
+														// nickname, userInteres
+					new Credentials(resultSet.getString(2), // idCredential, credentialsType, user, passwordOrToken
+							new CredentialsType(resultSet.getString(9), // idCredentials, name
+									resultSet.getString(13)),
+							resultSet.getString(10), resultSet.getString(11)),
+					new Image(resultSet.getString(3), // idImage, content
 							resultSet.getString(15)),
-					resultSet.getString(4),
-					resultSet.getString(5),
-					resultSet.getDate(6),
-					resultSet.getString(7),
-					new ArrayList<Interest>()) ;
+					resultSet.getString(4), resultSet.getString(5), resultSet.getDate(6), resultSet.getString(7),
+					new ArrayList<Interest>());
 			users.add(us);
 		}
 		for (User user : users) {
@@ -401,5 +618,26 @@ public class InsideManager {
 		}
 		return users;
 	}
+
+	public ArrayList<Event> getSuscriptionsByUser(String idUser) {
+		ArrayList<Event> eventsSuscribed = new ArrayList<Event>();
+		for (Suscription suscription : suscriptions) {
+			if (suscription.getUser().getIdUser().equals(idUser)) {
+				eventsSuscribed.add(suscription.getEvent());
+			}
+		}
+		return eventsSuscribed;
+	}
+
+	public ArrayList<Event> getEventsCreated(String idUser) {
+		ArrayList<Event> eventsCreated = new ArrayList<Event>();
+		for (Event event : events) {
+			if (event.getUserCreator().getIdUser().equals(idUser)) {
+				eventsCreated.add(event);
+			}
+		}
+		return eventsCreated;
+	}
+
 
 }

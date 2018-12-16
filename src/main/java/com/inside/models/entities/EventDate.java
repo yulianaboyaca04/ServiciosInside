@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.inside.persistence.DataBaseAcces;
 
@@ -13,8 +14,10 @@ public class EventDate {
 	@JsonProperty("idDate")
 	private String idDate;
 	@JsonProperty("dateStart")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 	private Timestamp dateStart;
 	@JsonProperty("dateFinish")
+	@JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ")
 	private Timestamp dateFinish;
 
 	public EventDate() {

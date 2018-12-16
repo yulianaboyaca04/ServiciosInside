@@ -24,6 +24,8 @@ public class Event {
 	private String nameEvent;
 	@JsonProperty("descriptionEvent")
 	private String descriptionEvent;
+	@JsonProperty("daysSponsored")
+	private float daysSponsored;
 	@JsonProperty("gallery")
 	private ArrayList<Image> gallery;
 	@JsonProperty("eventInterests")
@@ -37,8 +39,8 @@ public class Event {
 	}
 
 	public Event(String idEvent, User userCreator, HowToBuy howToBuy, Address address, EventDate eventDate,
-			String nameEvent, String descriptionEvent, ArrayList<Image> gallery, ArrayList<Interest> eventInterests,
-			ArrayList<Rule> regulations) {
+			String nameEvent, String descriptionEvent, float daysSponsored, ArrayList<Image> gallery,
+			ArrayList<Interest> eventInterests, ArrayList<Rule> regulations) {
 		this.idEvent = idEvent;
 		this.userCreator = userCreator;
 		this.howToBuy = howToBuy;
@@ -46,6 +48,7 @@ public class Event {
 		this.eventDate = eventDate;
 		this.nameEvent = nameEvent;
 		this.descriptionEvent = descriptionEvent;
+		this.daysSponsored = daysSponsored;
 		this.gallery = new ArrayList<Image>();
 		this.eventInterests = new ArrayList<Interest>();
 		this.regulations = new ArrayList<Rule>();
@@ -62,7 +65,7 @@ public class Event {
 
 	public EventCard getEventCard() {
 		return new EventCard(this.idEvent, this.nameEvent, this.address.getNameCity(), this.userCreator.getIdUser(),
-				this.userCreator.getNameUser() + " " + this.userCreator.getLastName(), this.eventDate.getDateStart());
+				this.userCreator.getNameUser() + " " + this.userCreator.getLastName(), this.eventDate.getDateStart(), this.howToBuy.getPrice(), this.gallery.get(0).getContent());
 	}
 
 	// -----------------------------inserts-en-bd-----------------------------------------------------------------
@@ -81,7 +84,7 @@ public class Event {
 
 	public void insertEventIntoDatabaseBasic() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
-				.prepareStatement("INSERT INTO EVENTS VALUES(?, ?, ?, ?, ?, ?, ?)");
+				.prepareStatement("INSERT INTO EVENTS VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
 		preparedStatement.setString(1, this.idEvent);
 		preparedStatement.setString(2, this.userCreator.getIdUser());
 		preparedStatement.setString(3, this.howToBuy.getIdHowToBuy());
@@ -89,6 +92,7 @@ public class Event {
 		preparedStatement.setString(5, this.eventDate.getIdDate());
 		preparedStatement.setString(6, this.nameEvent);
 		preparedStatement.setString(7, this.descriptionEvent);
+		preparedStatement.setFloat(8, this.daysSponsored);
 		preparedStatement.execute();
 	}
 
@@ -102,6 +106,12 @@ public class Event {
 
 	public void insertGalleryIntoDatabase(Image image) throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("INSERT INTO IMAGES VALUES(?,?)");
+		preparedStatement.setString(1, image.getIdImage());
+		preparedStatement.setString(2, image.getContent());
+		preparedStatement.execute();
+		
+		preparedStatement = DataBaseAcces.getInstance().getConnection()
 				.prepareStatement("INSERT INTO GALLERY VALUES(?,?)");
 		preparedStatement.setString(1, this.idEvent);
 		preparedStatement.setString(2, image.getIdImage());
@@ -244,6 +254,12 @@ public class Event {
 			this.regulations = eventEdited.regulations;
 			// TODO
 		}
+		if (this.daysSponsored != eventEdited.daysSponsored) {
+			this.daysSponsored = eventEdited.daysSponsored;
+			preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement("UPDATE EVENTS SET "
+					+ "DAYS_SPONSORED='" + this.daysSponsored + "' " + "WHERE ID_EVENT='" + this.idEvent + "'");
+			preparedStatement.executeUpdate();
+		}
 	}
 
 	// ---------------------------Getters&Setters-------------------------------------------------------
@@ -327,6 +343,14 @@ public class Event {
 		this.regulations = regulations;
 	}
 
+	public float getDaysSponsored() {
+		return daysSponsored;
+	}
+
+	public void setDaysSponsored(float daysSponsored) {
+		this.daysSponsored = daysSponsored;
+	}
+
 	@Override
 	public String toString() {
 		return "EventInside [idEvent=" + idEvent + ", userCreator=" + userCreator + ", howToBuy=" + howToBuy
@@ -342,9 +366,11 @@ public class Event {
 		String idUserCreator;
 		String nameUser;
 		Timestamp dateStart;
+		float price;
+		String content;
 
 		public EventCard(String idEvent, String nameEvent, String nameCitY, String idUserCreator, String nameUser,
-				Timestamp dateStart) {
+				Timestamp dateStart, float price, String content) {
 			super();
 			this.idEvent = idEvent;
 			this.nameEvent = nameEvent;
@@ -352,6 +378,8 @@ public class Event {
 			this.idUserCreator = idUserCreator;
 			this.nameUser = nameUser;
 			this.dateStart = dateStart;
+			this.price = price;
+			this.content = content;
 		}
 	}
 }

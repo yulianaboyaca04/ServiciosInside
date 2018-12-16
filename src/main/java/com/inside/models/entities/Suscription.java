@@ -44,4 +44,10 @@ public class Suscription {
 		preparedStatement.setString(2, this.event.getIdEvent());
 		preparedStatement.execute();
 	}
+	
+	public void deleteFromDataBase() throws SQLException {
+		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
+				.prepareStatement("DELETE FROM SUSCRIPTION WHERE ID_USER='" + this.user.getIdUser() + "' AND ID_EVENT='" + this.event.getIdEvent() + "' ");
+		preparedStatement.execute();
+	}
 }

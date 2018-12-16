@@ -6,6 +6,8 @@ com\inside\models\entities\CredentialsType.class
 com\inside\models\entities\Suscription.class
 com\inside\models\entities\User.class
 com\inside\models\dao\InsideManager$4.class
+com\inside\exceptions\SuscriptionDoesntExists.class
+com\inside\models\dao\InsideManager$5.class
 com\inside\exceptions\UserDoesntExists.class
 com\inside\aplication\InsideApplication.class
 com\inside\models\entities\Rule.class
@@ -20,6 +22,7 @@ com\inside\exceptions\UserAlreadyExists.class
 com\inside\persistence\PruebaPersistenciaCesar.class
 com\inside\models\entities\RulesType.class
 com\inside\models\entities\Image.class
+com\inside\models\dao\InsideManager$6.class
 com\inside\models\entities\ViewsHistory.class
 com\inside\exceptions\EventDoesntExists.class
 com\inside\persistence\JsonManager.class

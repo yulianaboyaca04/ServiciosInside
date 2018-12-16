@@ -13,7 +13,7 @@ public class DataBaseAcces {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			connection = DriverManager
-					.getConnection("jdbc:mysql://inside.cdkkazbcw0ew.sa-east-1.rds.amazonaws.com/insidebd?" + "user=insideroot&password=insidepassword&serverTimezone=UTC");
+					.getConnection("jdbc:mysql://insidebd.cmbvx7mf6nku.us-west-1.rds.amazonaws.com/insidebd?" + "user=insideroot&password=insideroot&serverTimezone=UTC");
 			statement = connection.createStatement();
 		} catch (ClassNotFoundException | SQLException ex) {
 			ex.printStackTrace();
@@ -52,6 +52,6 @@ public class DataBaseAcces {
 		while (resultSet.next()) {
 			idMax = resultSet.getString(1);
 		}
-		return idMax;
+		return (Integer.parseInt((idMax.equals("")?"0":idMax))+1)+"";
 	}
 }

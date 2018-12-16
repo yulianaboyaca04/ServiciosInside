@@ -72,7 +72,7 @@ public class User {
 		preparedStatement.setString(2, interest.getIdInterest());
 		preparedStatement.execute();
 	}
-	
+
 	// ----------------------------querys-en-bd---------------------------------------------------------------------
 
 	public static ArrayList<Interest> searchInterestsIntoDatabase(String idUser) throws SQLException {
@@ -89,7 +89,7 @@ public class User {
 		}
 		return interests;
 	}
-	
+
 	// -----------------------------------Remove-en-bd--------------------------------------------------
 	public void removeFromDatabase() throws SQLException {
 		PreparedStatement preparedStatement = DataBaseAcces.getInstance().getConnection()
@@ -102,7 +102,7 @@ public class User {
 				.prepareStatement("DELETE FROM USERS WHERE USERS.ID_USER = " + this.idUser);
 		preparedStatement.execute();
 	}
-	
+
 	// ------------------------------------Editar-en-bd---------------------------------------------------
 	public void edit(User userEdited) throws SQLException {
 		PreparedStatement preparedStatement;
@@ -125,7 +125,7 @@ public class User {
 		}
 
 		if ((!this.nameUser.equals(userEdited.getNameUser())) || (!this.lastName.equals(userEdited.getLastName()))
-				|| (!this.birthDate.equals(userEdited.getBirthDate()))
+		/* || (!this.birthDate.equals(userEdited.getBirthDate())) */
 				|| (!this.nickname.equals(userEdited.getNickname()))) {
 			this.nameUser = userEdited.getNameUser();
 			this.lastName = userEdited.getLastName();
@@ -140,7 +140,22 @@ public class User {
 		}
 		if (!this.userInteres.equals(userEdited.getUserInteres())) {
 			this.userInteres = userEdited.getUserInteres();
-			// TODO
+			for (Interest interest : userInteres) {
+				if (!userEdited.getUserInteres().contains(interest)) {
+					preparedStatement = DataBaseAcces.getInstance().getConnection().prepareStatement(
+					"DELETE FROM USER_INTERESTS WHERE ID_INTEREST= '" + interest.getIdInterest() + "' AND ID_USER= '" + this.idUser + "'");
+					preparedStatement.executeUpdate();
+				}
+			}
+			for (Interest interest : userEdited.userInteres) {
+				if (this.userInteres.contains(interest)) {
+					preparedStatement = DataBaseAcces.getInstance().getConnection()
+							.prepareStatement("INSERT INTO USER_INTERESTS VALUES(?,?)");
+							preparedStatement.setString(1, this.idUser);
+							preparedStatement.setString(2, interest.getIdInterest());
+							preparedStatement.execute();
+				}
+			}
 
 		}
 	}

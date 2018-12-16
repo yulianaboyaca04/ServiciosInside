@@ -2,6 +2,7 @@ package com.inside.persistence;
 	
 import java.io.IOException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * 
@@ -17,7 +18,8 @@ public class JsonManager {
 	 * @throws IOException
 	 */
 	public static String printJson(Object object){
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").create();
 		return gson.toJson(object);
 	}
 }
